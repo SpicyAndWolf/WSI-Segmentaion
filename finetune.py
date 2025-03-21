@@ -15,6 +15,7 @@ from torch.optim.swa_utils import AveragedModel
 import data.dataset
 import utils.utils
 import utils.option
+from datetime import datetime
 
 import resource
 
@@ -59,9 +60,6 @@ for r in range(args.nb_run):
     # edit
     state_dict = torch.load(os.path.join(load_path, f'best_acc_net_{r + 1}.pth'))  # edit
     state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}  # edit
-    print(net.keys())  # edit
-    print(state_dict.keys())  # edit
-    net = AveragedModel(net)  # edit
     net.load_state_dict(state_dict, strict=True)  # edit
     net = torch.nn.DataParallel(net).cuda() # edit
     freeze_bn_layers(net.module)  # edit
@@ -84,6 +82,7 @@ for r in range(args.nb_run):
 
     # start Train
     for epoch in range(1, args.fine_tune_epochs + 2):
+        startTime=datetime.now()
         if epoch > 1:
             # 在第1个epoch之后，加载confidence_scores
             confidence_scores_path = os.path.join(save_pth_path, 'confidence_scores.npy')
@@ -123,6 +122,6 @@ for r in range(args.nb_run):
             best_acc = acc
             # torch.save(net_val.state_dict(), os.path.join(save_pth_path, f'best_acc_finetune_net_{r + 1}.pth'))
             torch.save(net_val.module.state_dict(), os.path.join(save_pth_path, f'best_acc_finetune_net_{r + 1}.pth')) # edit
-
+        print("An finetune epoch cost time: " + str(datetime.now() - startTime))
 
 
