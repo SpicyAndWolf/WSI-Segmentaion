@@ -261,10 +261,10 @@ def get_args_parser():
                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                 help="Dataset parser for training on TinyImgNet")
     WSI.add_argument('--data-name', default='WSI', type=str, help='Dataset name')
-    WSI.add_argument("--train-dir", type=str, default='./data/WSI/train',
+    WSI.add_argument("--train-dir", type=str, default='/home/zyf/Projects/WSI/Datasets/WSI/train',
                             help="WSI train directory")
-    WSI.add_argument("--val-dir", type=str, default='./data/WSI/test', help="WSI val directory")
-    WSI.add_argument("--test-dir", type=str, default='./data/WSI/test', help="WSI val directory")
+    WSI.add_argument("--val-dir", type=str, default='/home/zyf/Projects/WSI/Datasets/WSI/test', help="WSI val directory")
+    WSI.add_argument("--test-dir", type=str, default='/home/zyf/Projects/WSI/Datasets/WSI/test', help="WSI val directory")
     WSI.add_argument("--nb-cls", type=int, default=3, help="number of classes in WSI")
     WSI.add_argument("--imb-factor", type=float, default=1.0, help="imbalance rate in WSI") 
 

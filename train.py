@@ -101,8 +101,16 @@ def compute_loss(args, net, image, target, image_idx, correct_log, cls_criterion
 def train(train_loader, net, optimizer, epoch, correct_log, logger, writer, args):
     net.train()
 
+    # edit：给Stroma加权重
+    class_counts = [16322, 1387, 18911]
+    total_samples = sum(class_counts)
+    num_classes = len(class_counts)
+    class_weights = [total_samples / (num_classes * count) for count in class_counts]
+    class_weights = torch.tensor(class_weights, dtype=torch.float).cuda()
+    cls_criterion = torch.nn.CrossEntropyLoss(weight=class_weights) # 交叉熵损失函数
+
     ## define criterion
-    cls_criterion = torch.nn.CrossEntropyLoss()
+    # cls_criterion = torch.nn.CrossEntropyLoss()
     mixup_criterion = Mixup_Criterion(beta=args.mixup_beta, cls_criterion=cls_criterion)
     rank_criterion = CRL_Criterion()
 

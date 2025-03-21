@@ -53,8 +53,6 @@ for r in range(args.nb_run):
         state_dict = torch.load(os.path.join(save_path, f'best_acc_net_{r + 1}.pth'))
         state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}
         net.load_state_dict(state_dict, strict=True)
-        if args.optim_name == 'fmfp' or args.optim_name == 'swa':
-            net = AveragedModel(net)
         net = torch.nn.DataParallel(net).cuda()
         # if args.optim_name == 'fmfp' or args.optim_name == 'swa':
         #     net = AveragedModel(net)
