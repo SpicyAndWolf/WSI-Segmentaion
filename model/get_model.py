@@ -1,6 +1,7 @@
 import model.resnet18
 import model.resnet32
 import model.densenet_BC
+import model.resnet50
 import model.vgg
 import model.wrn
 import model.classifier
@@ -12,6 +13,8 @@ def get_model(model_name, nb_cls, logger, args):
         net = model.resnet18.ResNet18(num_classes=nb_cls, use_cos=args.use_cosine, cos_temp=args.cos_temp).cuda()
     elif model_name == 'resnet32':
         net = model.resnet32.ResNet32(num_classes=nb_cls, use_cos=args.use_cosine, cos_temp=args.cos_temp).cuda()
+    elif model_name == 'resnet50':    # edit
+        net = model.resnet50.ResNet50(num_classes=nb_cls, use_cos=args.use_cosine, cos_temp=args.cos_temp).cuda()
     elif model_name == 'densenet':
         net = model.densenet_BC.DenseNet3(depth=100,
                                           num_classes=nb_cls,
