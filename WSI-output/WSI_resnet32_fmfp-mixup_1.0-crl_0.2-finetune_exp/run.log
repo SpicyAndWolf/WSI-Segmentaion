@@ -958,3 +958,178 @@
 2025-03-21 06:31:25,941 INFO Epoch 21 	 Batch 2199	LR : 0.00325	Top1 Acc.: 97.19	CLS Loss: 0.10	Mixup Loss: 1.02	CRL Loss: 0.04	Tot. Loss: 0.11
 2025-03-21 06:38:57,143 INFO ################## 
  ---> Validation Epoch 21	Acc.: 97.541	FPR: 30.000	AUROC: 95.048	AUPR: 37.355	AURC: 1.664	EAURC: 1.359	AUPR Succ.: 99.862	ECE: 1.660	NLL: 0.799	Brier: 3.884
+2025-03-26 04:20:01,276 INFO {
+    "alpha": 0.5,
+    "batch_size": 16,
+    "cos_temp": 8,
+    "crl_weight": 0.2,
+    "data_name": "WSI",
+    "deit_path": "/home/liyuting/lyt/deit_base_patch16_224-b5f2ef4d.pth",
+    "epochs": 20,
+    "fine_tune_epochs": 20,
+    "fine_tune_lr": 0.005,
+    "gpu": "2,6",
+    "imb_factor": 1.0,
+    "lr": 0.01,
+    "mixup_beta": 10.0,
+    "mixup_weight": 1.0,
+    "model_name": "resnet32",
+    "momentum": 0.9,
+    "nb_cls": 3,
+    "nb_run": 1,
+    "nb_worker": 4,
+    "optim_name": "fmfp",
+    "p": 2,
+    "resume": false,
+    "resume_path": null,
+    "reweighting_type": "exp",
+    "save_dir": "./WSI-output",
+    "subcommand": "WSI",
+    "swa_epoch_start": 15,
+    "swa_lr": 0.004,
+    "t": 1.0,
+    "test_dir": "/home/zyf/Projects/WSI/Datasets/WSI/test",
+    "train_dir": "/home/zyf/Projects/WSI/Datasets/WSI/train",
+    "train_size": 224,
+    "use_cosine": true,
+    "val_dir": "/home/zyf/Projects/WSI/Datasets/WSI/val",
+    "weight_decay": 0.0005
+}
+2025-03-26 04:20:01,419 INFO ####################################################################################################
+1 / 1 Running
+2025-03-26 04:20:02,527 INFO Using resnet32 ...
+2025-03-26 04:22:01,244 INFO {
+    "alpha": 0.5,
+    "batch_size": 16,
+    "cos_temp": 8,
+    "crl_weight": 0.2,
+    "data_name": "WSI",
+    "deit_path": "/home/liyuting/lyt/deit_base_patch16_224-b5f2ef4d.pth",
+    "epochs": 20,
+    "fine_tune_epochs": 20,
+    "fine_tune_lr": 0.005,
+    "gpu": "2,6",
+    "imb_factor": 1.0,
+    "lr": 0.01,
+    "mixup_beta": 10.0,
+    "mixup_weight": 1.0,
+    "model_name": "resnet32",
+    "momentum": 0.9,
+    "nb_cls": 3,
+    "nb_run": 1,
+    "nb_worker": 4,
+    "optim_name": "fmfp",
+    "p": 2,
+    "resume": false,
+    "resume_path": null,
+    "reweighting_type": "exp",
+    "save_dir": "./WSI-output",
+    "subcommand": "WSI",
+    "swa_epoch_start": 15,
+    "swa_lr": 0.004,
+    "t": 1.0,
+    "test_dir": "/home/zyf/Projects/WSI/Datasets/WSI/test",
+    "train_dir": "/home/zyf/Projects/WSI/Datasets/WSI/train",
+    "train_size": 224,
+    "use_cosine": true,
+    "val_dir": "/home/zyf/Projects/WSI/Datasets/WSI/val",
+    "weight_decay": 0.0005
+}
+2025-03-26 04:22:01,386 INFO ####################################################################################################
+1 / 1 Running
+2025-03-26 04:22:02,445 INFO Using resnet32 ...
+2025-03-26 04:26:42,810 INFO {
+    "alpha": 0.5,
+    "batch_size": 16,
+    "cos_temp": 8,
+    "crl_weight": 0.2,
+    "data_name": "WSI",
+    "deit_path": "/home/liyuting/lyt/deit_base_patch16_224-b5f2ef4d.pth",
+    "epochs": 20,
+    "fine_tune_epochs": 20,
+    "fine_tune_lr": 0.005,
+    "gpu": "2,6",
+    "imb_factor": 1.0,
+    "lr": 0.01,
+    "mixup_beta": 10.0,
+    "mixup_weight": 1.0,
+    "model_name": "resnet32",
+    "momentum": 0.9,
+    "nb_cls": 3,
+    "nb_run": 1,
+    "nb_worker": 4,
+    "optim_name": "fmfp",
+    "p": 2,
+    "resume": false,
+    "resume_path": null,
+    "reweighting_type": "exp",
+    "save_dir": "./WSI-output",
+    "subcommand": "WSI",
+    "swa_epoch_start": 15,
+    "swa_lr": 0.004,
+    "t": 1.0,
+    "test_dir": "/home/zyf/Projects/WSI/Datasets/WSI/test",
+    "train_dir": "/home/zyf/Projects/WSI/Datasets/WSI/train",
+    "train_size": 224,
+    "use_cosine": true,
+    "val_dir": "/home/zyf/Projects/WSI/Datasets/WSI/val",
+    "weight_decay": 0.0005
+}
+2025-03-26 04:26:42,959 INFO ####################################################################################################
+1 / 1 Running
+2025-03-26 04:26:44,038 INFO Using resnet32 ...
+2025-03-26 04:33:08,677 INFO ####### --- Training Epoch 1 --- #######
+2025-03-26 04:36:58,397 INFO Epoch 1 	 Batch 99	LR : 0.00500	Top1 Acc.: 84.19	CLS Loss: 0.41	Mixup Loss: 0.84	CRL Loss: 0.00	Tot. Loss: 0.41
+2025-03-26 04:40:52,513 INFO Epoch 1 	 Batch 199	LR : 0.00500	Top1 Acc.: 84.25	CLS Loss: 0.41	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.41
+2025-03-26 04:44:38,528 INFO Epoch 1 	 Batch 299	LR : 0.00500	Top1 Acc.: 84.81	CLS Loss: 0.40	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 04:48:29,695 INFO Epoch 1 	 Batch 399	LR : 0.00500	Top1 Acc.: 85.88	CLS Loss: 0.40	Mixup Loss: 0.83	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 04:52:22,641 INFO Epoch 1 	 Batch 499	LR : 0.00500	Top1 Acc.: 84.75	CLS Loss: 0.39	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.39
+2025-03-26 04:56:16,882 INFO Epoch 1 	 Batch 599	LR : 0.00500	Top1 Acc.: 84.62	CLS Loss: 0.41	Mixup Loss: 0.83	CRL Loss: 0.00	Tot. Loss: 0.41
+2025-03-26 05:00:10,326 INFO Epoch 1 	 Batch 699	LR : 0.00500	Top1 Acc.: 86.38	CLS Loss: 0.37	Mixup Loss: 0.84	CRL Loss: 0.00	Tot. Loss: 0.37
+2025-03-26 05:04:03,822 INFO Epoch 1 	 Batch 799	LR : 0.00500	Top1 Acc.: 86.31	CLS Loss: 0.37	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.37
+2025-03-26 05:07:59,075 INFO Epoch 1 	 Batch 899	LR : 0.00500	Top1 Acc.: 84.50	CLS Loss: 0.40	Mixup Loss: 0.86	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 05:11:54,880 INFO Epoch 1 	 Batch 999	LR : 0.00500	Top1 Acc.: 81.69	CLS Loss: 0.45	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.45
+2025-03-26 05:15:50,397 INFO Epoch 1 	 Batch 1099	LR : 0.00500	Top1 Acc.: 83.31	CLS Loss: 0.42	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.42
+2025-03-26 05:19:43,199 INFO Epoch 1 	 Batch 1199	LR : 0.00500	Top1 Acc.: 87.19	CLS Loss: 0.35	Mixup Loss: 0.86	CRL Loss: 0.00	Tot. Loss: 0.35
+2025-03-26 05:23:41,127 INFO Epoch 1 	 Batch 1299	LR : 0.00500	Top1 Acc.: 83.31	CLS Loss: 0.39	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.39
+2025-03-26 05:27:39,568 INFO Epoch 1 	 Batch 1399	LR : 0.00500	Top1 Acc.: 85.25	CLS Loss: 0.38	Mixup Loss: 0.84	CRL Loss: 0.00	Tot. Loss: 0.38
+2025-03-26 05:31:34,293 INFO Epoch 1 	 Batch 1499	LR : 0.00500	Top1 Acc.: 84.88	CLS Loss: 0.39	Mixup Loss: 0.84	CRL Loss: 0.00	Tot. Loss: 0.39
+2025-03-26 05:35:28,458 INFO Epoch 1 	 Batch 1599	LR : 0.00500	Top1 Acc.: 84.31	CLS Loss: 0.41	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.41
+2025-03-26 05:39:22,737 INFO Epoch 1 	 Batch 1699	LR : 0.00500	Top1 Acc.: 85.50	CLS Loss: 0.38	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.38
+2025-03-26 05:43:13,491 INFO Epoch 1 	 Batch 1799	LR : 0.00500	Top1 Acc.: 85.12	CLS Loss: 0.40	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 05:46:59,976 INFO Epoch 1 	 Batch 1899	LR : 0.00500	Top1 Acc.: 83.62	CLS Loss: 0.39	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.39
+2025-03-26 05:50:45,066 INFO Epoch 1 	 Batch 1999	LR : 0.00500	Top1 Acc.: 85.19	CLS Loss: 0.40	Mixup Loss: 0.89	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 05:54:33,662 INFO Epoch 1 	 Batch 2099	LR : 0.00500	Top1 Acc.: 84.00	CLS Loss: 0.40	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 05:58:17,443 INFO Epoch 1 	 Batch 2199	LR : 0.00500	Top1 Acc.: 84.00	CLS Loss: 0.40	Mixup Loss: 0.86	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 06:01:57,899 INFO Epoch 1 	 Batch 2299	LR : 0.00500	Top1 Acc.: 84.62	CLS Loss: 0.39	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.39
+2025-03-26 06:05:38,236 INFO Epoch 1 	 Batch 2399	LR : 0.00500	Top1 Acc.: 83.06	CLS Loss: 0.42	Mixup Loss: 0.88	CRL Loss: 0.00	Tot. Loss: 0.42
+2025-03-26 06:09:21,085 INFO Epoch 1 	 Batch 2499	LR : 0.00500	Top1 Acc.: 84.12	CLS Loss: 0.40	Mixup Loss: 0.86	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 06:12:58,498 INFO Epoch 1 	 Batch 2599	LR : 0.00500	Top1 Acc.: 84.56	CLS Loss: 0.41	Mixup Loss: 0.90	CRL Loss: 0.00	Tot. Loss: 0.41
+2025-03-26 06:16:34,873 INFO Epoch 1 	 Batch 2699	LR : 0.00500	Top1 Acc.: 85.56	CLS Loss: 0.38	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.38
+2025-03-26 06:20:14,709 INFO Epoch 1 	 Batch 2799	LR : 0.00500	Top1 Acc.: 84.38	CLS Loss: 0.40	Mixup Loss: 0.91	CRL Loss: 0.00	Tot. Loss: 0.40
+2025-03-26 06:23:49,709 INFO Epoch 1 	 Batch 2899	LR : 0.00500	Top1 Acc.: 84.75	CLS Loss: 0.42	Mixup Loss: 0.88	CRL Loss: 0.00	Tot. Loss: 0.42
+2025-03-26 06:27:23,645 INFO Epoch 1 	 Batch 2999	LR : 0.00500	Top1 Acc.: 83.31	CLS Loss: 0.41	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 0.41
+2025-03-26 06:30:47,092 INFO ################## 
+ ---> Validation Epoch 1	Acc.: 87.006	FPR: 68.844	AUROC: 83.503	AUPR: 39.774	AURC: 35.155	EAURC: 26.321	AUPR Succ.: 97.073	ECE: 3.061	NLL: 3.494	Brier: 19.338
+2025-03-26 06:30:47,093 INFO Accuracy improved from 0.00 to 87.01!!!
+2025-03-26 06:30:47,432 INFO re-weighting...
+2025-03-26 06:30:47,434 INFO ####### --- Training Epoch 2 --- #######
+2025-03-26 06:34:24,025 INFO Epoch 2 	 Batch 99	LR : 0.00497	Top1 Acc.: 83.75	CLS Loss: 0.41	Mixup Loss: 0.91	CRL Loss: 0.22	Tot. Loss: 0.45
+2025-03-26 06:37:56,040 INFO Epoch 2 	 Batch 199	LR : 0.00497	Top1 Acc.: 85.00	CLS Loss: 0.38	Mixup Loss: 0.89	CRL Loss: 0.21	Tot. Loss: 0.42
+2025-03-26 06:41:26,941 INFO Epoch 2 	 Batch 299	LR : 0.00497	Top1 Acc.: 84.94	CLS Loss: 0.38	Mixup Loss: 0.87	CRL Loss: 0.21	Tot. Loss: 0.42
+2025-03-26 06:45:04,989 INFO Epoch 2 	 Batch 399	LR : 0.00497	Top1 Acc.: 85.50	CLS Loss: 0.38	Mixup Loss: 0.86	CRL Loss: 0.24	Tot. Loss: 0.43
+2025-03-26 06:48:37,353 INFO Epoch 2 	 Batch 499	LR : 0.00497	Top1 Acc.: 84.00	CLS Loss: 0.41	Mixup Loss: 0.89	CRL Loss: 0.21	Tot. Loss: 0.45
+2025-03-26 06:52:03,618 INFO Epoch 2 	 Batch 599	LR : 0.00497	Top1 Acc.: 85.44	CLS Loss: 0.39	Mixup Loss: 0.91	CRL Loss: 0.23	Tot. Loss: 0.44
+2025-03-26 06:55:19,362 INFO Epoch 2 	 Batch 699	LR : 0.00497	Top1 Acc.: 84.19	CLS Loss: 0.39	Mixup Loss: 0.89	CRL Loss: 0.21	Tot. Loss: 0.43
+2025-03-26 06:58:29,911 INFO Epoch 2 	 Batch 799	LR : 0.00497	Top1 Acc.: 84.75	CLS Loss: 0.38	Mixup Loss: 0.91	CRL Loss: 0.22	Tot. Loss: 0.43
+2025-03-26 07:01:38,112 INFO Epoch 2 	 Batch 899	LR : 0.00497	Top1 Acc.: 83.75	CLS Loss: 0.41	Mixup Loss: 0.90	CRL Loss: 0.21	Tot. Loss: 0.45
+2025-03-26 07:04:48,216 INFO Epoch 2 	 Batch 999	LR : 0.00497	Top1 Acc.: 84.75	CLS Loss: 0.37	Mixup Loss: 0.89	CRL Loss: 0.22	Tot. Loss: 0.42
+2025-03-26 07:07:49,072 INFO Epoch 2 	 Batch 1099	LR : 0.00497	Top1 Acc.: 84.56	CLS Loss: 0.39	Mixup Loss: 0.91	CRL Loss: 0.22	Tot. Loss: 0.43
+2025-03-26 07:10:57,427 INFO Epoch 2 	 Batch 1199	LR : 0.00497	Top1 Acc.: 86.06	CLS Loss: 0.37	Mixup Loss: 0.91	CRL Loss: 0.21	Tot. Loss: 0.41
+2025-03-26 07:14:08,332 INFO Epoch 2 	 Batch 1299	LR : 0.00497	Top1 Acc.: 84.75	CLS Loss: 0.41	Mixup Loss: 0.91	CRL Loss: 0.22	Tot. Loss: 0.45
+2025-03-26 07:17:18,189 INFO Epoch 2 	 Batch 1399	LR : 0.00497	Top1 Acc.: 83.50	CLS Loss: 0.41	Mixup Loss: 0.93	CRL Loss: 0.22	Tot. Loss: 0.45
+2025-03-26 07:20:29,814 INFO Epoch 2 	 Batch 1499	LR : 0.00497	Top1 Acc.: 85.12	CLS Loss: 0.39	Mixup Loss: 0.93	CRL Loss: 0.20	Tot. Loss: 0.43
+2025-03-26 07:23:44,732 INFO Epoch 2 	 Batch 1599	LR : 0.00497	Top1 Acc.: 85.06	CLS Loss: 0.39	Mixup Loss: 0.92	CRL Loss: 0.24	Tot. Loss: 0.44
+2025-03-26 07:26:56,631 INFO Epoch 2 	 Batch 1699	LR : 0.00497	Top1 Acc.: 82.44	CLS Loss: 0.42	Mixup Loss: 0.89	CRL Loss: 0.25	Tot. Loss: 0.46
+2025-03-26 07:30:09,508 INFO Epoch 2 	 Batch 1799	LR : 0.00497	Top1 Acc.: 84.81	CLS Loss: 0.40	Mixup Loss: 0.92	CRL Loss: 0.23	Tot. Loss: 0.45
+2025-03-26 07:33:24,844 INFO Epoch 2 	 Batch 1899	LR : 0.00497	Top1 Acc.: 86.75	CLS Loss: 0.35	Mixup Loss: 0.90	CRL Loss: 0.22	Tot. Loss: 0.39

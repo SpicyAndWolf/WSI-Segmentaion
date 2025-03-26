@@ -107,7 +107,7 @@ def get_loader(dataset, train_dir, val_dir, test_dir, batch_size, imb_factor, mo
 
     # edit
     elif dataset == "WSI":
-        norm_mean, norm_std = (0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)
+        norm_mean, norm_std = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
         nb_cls = 3
 
     if dataset in ['cifar10', 'cifar10_LT', 'cifar100', 'cifar100_LT']:
