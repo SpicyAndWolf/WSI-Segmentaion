@@ -6,6 +6,7 @@ import model.vgg
 import model.wrn
 import model.classifier
 import timm
+import torchvision.models
 import torch
 
 def get_model(model_name, nb_cls, logger, args):
@@ -15,6 +16,12 @@ def get_model(model_name, nb_cls, logger, args):
         net = model.resnet32.ResNet32(num_classes=nb_cls, use_cos=args.use_cosine, cos_temp=args.cos_temp).cuda()
     elif model_name == 'resnet50':    # edit
         net = model.resnet50.ResNet50(num_classes=nb_cls, use_cos=args.use_cosine, cos_temp=args.cos_temp).cuda()
+        # 加载预训练权重
+        pretrained_dict = torchvision.models.resnet50(pretrained=True).state_dict()
+        net_dict = net.state_dict()
+        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in net_dict and 'fc' not in k}
+        net_dict.update(pretrained_dict)
+        net.load_state_dict(net_dict, strict=False)
     elif model_name == 'densenet':
         net = model.densenet_BC.DenseNet3(depth=100,
                                           num_classes=nb_cls,

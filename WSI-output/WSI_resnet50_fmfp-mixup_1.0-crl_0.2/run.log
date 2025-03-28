@@ -1,0 +1,213 @@
+2025-03-28 03:18:25,566 INFO {
+    "alpha": 0.5,
+    "batch_size": 64,
+    "cos_temp": 8,
+    "crl_weight": 0.2,
+    "data_name": "WSI",
+    "deit_path": "/home/liyuting/lyt/deit_base_patch16_224-b5f2ef4d.pth",
+    "epochs": 30,
+    "fine_tune_epochs": 20,
+    "fine_tune_lr": 0.01,
+    "gpu": "0,6",
+    "imb_factor": 1.0,
+    "lr": 0.01,
+    "mixup_beta": 10.0,
+    "mixup_weight": 1.0,
+    "model_name": "resnet50",
+    "momentum": 0.9,
+    "nb_cls": 3,
+    "nb_run": 1,
+    "nb_worker": 4,
+    "optim_name": "fmfp",
+    "p": 2,
+    "resume": false,
+    "resume_path": null,
+    "reweighting_type": null,
+    "save_dir": "./WSI-output",
+    "subcommand": "WSI",
+    "swa_epoch_start": 22,
+    "swa_lr": 0.005,
+    "t": 1.0,
+    "test_dir": "/home/zyf/Projects/WSI/Datasets/WSI/test",
+    "train_dir": "/home/zyf/Projects/WSI/Datasets/WSI/train",
+    "train_size": 224,
+    "use_cosine": true,
+    "val_dir": "/home/zyf/Projects/WSI/Datasets/WSI/val",
+    "weight_decay": 0.0005
+}
+2025-03-28 03:18:25,705 INFO ####################################################################################################
+1 / 1 Running
+2025-03-28 03:18:29,393 INFO Using resnet50 ...
+2025-03-28 03:18:30,698 INFO ####### --- Training Epoch 1 --- #######
+2025-03-28 03:20:50,989 INFO Epoch 1 	 Batch 99	LR : 0.01000	Top1 Acc.: 71.81	CLS Loss: 0.67	Mixup Loss: 0.97	CRL Loss: 0.00	Tot. Loss: 1.65
+2025-03-28 03:23:05,234 INFO Epoch 1 	 Batch 199	LR : 0.01000	Top1 Acc.: 81.52	CLS Loss: 0.50	Mixup Loss: 0.89	CRL Loss: 0.00	Tot. Loss: 1.40
+2025-03-28 03:25:19,547 INFO Epoch 1 	 Batch 299	LR : 0.01000	Top1 Acc.: 82.81	CLS Loss: 0.47	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 1.34
+2025-03-28 03:27:34,068 INFO Epoch 1 	 Batch 399	LR : 0.01000	Top1 Acc.: 84.69	CLS Loss: 0.43	Mixup Loss: 0.87	CRL Loss: 0.00	Tot. Loss: 1.30
+2025-03-28 03:29:48,026 INFO Epoch 1 	 Batch 499	LR : 0.01000	Top1 Acc.: 85.95	CLS Loss: 0.41	Mixup Loss: 0.86	CRL Loss: 0.00	Tot. Loss: 1.26
+2025-03-28 03:32:00,500 INFO Epoch 1 	 Batch 599	LR : 0.01000	Top1 Acc.: 85.89	CLS Loss: 0.39	Mixup Loss: 0.85	CRL Loss: 0.00	Tot. Loss: 1.25
+2025-03-28 03:34:12,212 INFO Epoch 1 	 Batch 699	LR : 0.01000	Top1 Acc.: 86.70	CLS Loss: 0.37	Mixup Loss: 0.84	CRL Loss: 0.00	Tot. Loss: 1.20
+2025-03-28 03:35:17,551 INFO ################## 
+ ---> Validation Epoch 1	Acc.: 90.948	FPR: 53.832	AUROC: 88.924	AUPR: 42.316	AURC: 15.825	EAURC: 11.598	AUPR Succ.: 98.751	ECE: 6.209	NLL: 2.717	Brier: 13.898
+2025-03-28 03:35:17,551 INFO Accuracy improved from 0.00 to 90.95!!!
+2025-03-28 03:35:17,679 INFO ####### --- Training Epoch 2 --- #######
+2025-03-28 03:37:29,618 INFO Epoch 2 	 Batch 99	LR : 0.00997	Top1 Acc.: 87.17	CLS Loss: 0.35	Mixup Loss: 0.84	CRL Loss: 0.24	Tot. Loss: 1.24
+2025-03-28 03:39:40,899 INFO Epoch 2 	 Batch 199	LR : 0.00997	Top1 Acc.: 87.55	CLS Loss: 0.34	Mixup Loss: 0.83	CRL Loss: 0.26	Tot. Loss: 1.23
+2025-03-28 03:41:52,230 INFO Epoch 2 	 Batch 299	LR : 0.00997	Top1 Acc.: 86.97	CLS Loss: 0.34	Mixup Loss: 0.82	CRL Loss: 0.25	Tot. Loss: 1.21
+2025-03-28 03:44:03,632 INFO Epoch 2 	 Batch 399	LR : 0.00997	Top1 Acc.: 87.98	CLS Loss: 0.32	Mixup Loss: 0.82	CRL Loss: 0.25	Tot. Loss: 1.19
+2025-03-28 03:46:31,795 INFO Epoch 2 	 Batch 499	LR : 0.00997	Top1 Acc.: 87.69	CLS Loss: 0.33	Mixup Loss: 0.82	CRL Loss: 0.25	Tot. Loss: 1.20
+2025-03-28 03:48:42,914 INFO Epoch 2 	 Batch 599	LR : 0.00997	Top1 Acc.: 88.69	CLS Loss: 0.31	Mixup Loss: 0.81	CRL Loss: 0.24	Tot. Loss: 1.16
+2025-03-28 03:51:07,281 INFO Epoch 2 	 Batch 699	LR : 0.00997	Top1 Acc.: 88.52	CLS Loss: 0.31	Mixup Loss: 0.80	CRL Loss: 0.24	Tot. Loss: 1.16
+2025-03-28 03:52:11,896 INFO ################## 
+ ---> Validation Epoch 2	Acc.: 91.201	FPR: 65.000	AUROC: 86.827	AUPR: 37.024	AURC: 18.414	EAURC: 14.424	AUPR Succ.: 98.450	ECE: 5.609	NLL: 2.648	Brier: 13.953
+2025-03-28 03:52:11,897 INFO Accuracy improved from 90.95 to 91.20!!!
+2025-03-28 03:52:12,641 INFO ####### --- Training Epoch 3 --- #######
+2025-03-28 03:54:24,506 INFO Epoch 3 	 Batch 99	LR : 0.00989	Top1 Acc.: 89.28	CLS Loss: 0.29	Mixup Loss: 0.80	CRL Loss: 0.19	Tot. Loss: 1.13
+2025-03-28 03:56:35,876 INFO Epoch 3 	 Batch 199	LR : 0.00989	Top1 Acc.: 89.03	CLS Loss: 0.30	Mixup Loss: 0.81	CRL Loss: 0.19	Tot. Loss: 1.15
+2025-03-28 03:58:59,040 INFO Epoch 3 	 Batch 299	LR : 0.00989	Top1 Acc.: 89.64	CLS Loss: 0.29	Mixup Loss: 0.80	CRL Loss: 0.19	Tot. Loss: 1.12
+2025-03-28 04:01:10,008 INFO Epoch 3 	 Batch 399	LR : 0.00989	Top1 Acc.: 89.72	CLS Loss: 0.27	Mixup Loss: 0.79	CRL Loss: 0.19	Tot. Loss: 1.10
+2025-03-28 04:03:21,152 INFO Epoch 3 	 Batch 499	LR : 0.00989	Top1 Acc.: 89.31	CLS Loss: 0.29	Mixup Loss: 0.81	CRL Loss: 0.19	Tot. Loss: 1.14
+2025-03-28 04:05:32,351 INFO Epoch 3 	 Batch 599	LR : 0.00989	Top1 Acc.: 89.58	CLS Loss: 0.28	Mixup Loss: 0.80	CRL Loss: 0.19	Tot. Loss: 1.12
+2025-03-28 04:07:43,350 INFO Epoch 3 	 Batch 699	LR : 0.00989	Top1 Acc.: 89.67	CLS Loss: 0.28	Mixup Loss: 0.80	CRL Loss: 0.18	Tot. Loss: 1.12
+2025-03-28 04:08:47,935 INFO ################## 
+ ---> Validation Epoch 3	Acc.: 93.452	FPR: 55.556	AUROC: 90.563	AUPR: 37.193	AURC: 9.184	EAURC: 6.992	AUPR Succ.: 99.264	ECE: 11.071	NLL: 2.593	Brier: 12.459
+2025-03-28 04:08:47,935 INFO Accuracy improved from 91.20 to 93.45!!!
+2025-03-28 04:08:48,658 INFO ####### --- Training Epoch 4 --- #######
+2025-03-28 04:11:00,467 INFO Epoch 4 	 Batch 99	LR : 0.00976	Top1 Acc.: 90.20	CLS Loss: 0.28	Mixup Loss: 0.80	CRL Loss: 0.16	Tot. Loss: 1.11
+2025-03-28 04:13:11,749 INFO Epoch 4 	 Batch 199	LR : 0.00976	Top1 Acc.: 90.64	CLS Loss: 0.27	Mixup Loss: 0.80	CRL Loss: 0.16	Tot. Loss: 1.10
+2025-03-28 04:15:22,992 INFO Epoch 4 	 Batch 299	LR : 0.00976	Top1 Acc.: 89.67	CLS Loss: 0.26	Mixup Loss: 0.79	CRL Loss: 0.16	Tot. Loss: 1.08
+2025-03-28 04:17:34,190 INFO Epoch 4 	 Batch 399	LR : 0.00976	Top1 Acc.: 90.33	CLS Loss: 0.26	Mixup Loss: 0.77	CRL Loss: 0.15	Tot. Loss: 1.06
+2025-03-28 04:19:45,354 INFO Epoch 4 	 Batch 499	LR : 0.00976	Top1 Acc.: 90.78	CLS Loss: 0.25	Mixup Loss: 0.79	CRL Loss: 0.15	Tot. Loss: 1.07
+2025-03-28 04:21:56,421 INFO Epoch 4 	 Batch 599	LR : 0.00976	Top1 Acc.: 90.47	CLS Loss: 0.26	Mixup Loss: 0.79	CRL Loss: 0.16	Tot. Loss: 1.08
+2025-03-28 04:24:08,135 INFO Epoch 4 	 Batch 699	LR : 0.00976	Top1 Acc.: 89.83	CLS Loss: 0.27	Mixup Loss: 0.80	CRL Loss: 0.16	Tot. Loss: 1.10
+2025-03-28 04:25:13,568 INFO ################## 
+ ---> Validation Epoch 4	Acc.: 93.976	FPR: 49.719	AUROC: 91.868	AUPR: 37.628	AURC: 7.396	EAURC: 5.544	AUPR Succ.: 99.418	ECE: 6.940	NLL: 2.059	Brier: 10.098
+2025-03-28 04:25:13,569 INFO Accuracy improved from 93.45 to 93.98!!!
+2025-03-28 04:25:14,132 INFO ####### --- Training Epoch 5 --- #######
+2025-03-28 04:27:28,030 INFO Epoch 5 	 Batch 99	LR : 0.00957	Top1 Acc.: 91.11	CLS Loss: 0.24	Mixup Loss: 0.79	CRL Loss: 0.15	Tot. Loss: 1.06
+2025-03-28 04:29:41,778 INFO Epoch 5 	 Batch 199	LR : 0.00957	Top1 Acc.: 91.02	CLS Loss: 0.24	Mixup Loss: 0.78	CRL Loss: 0.14	Tot. Loss: 1.05
+2025-03-28 04:31:55,540 INFO Epoch 5 	 Batch 299	LR : 0.00957	Top1 Acc.: 91.70	CLS Loss: 0.23	Mixup Loss: 0.78	CRL Loss: 0.14	Tot. Loss: 1.04
+2025-03-28 04:34:10,285 INFO Epoch 5 	 Batch 399	LR : 0.00957	Top1 Acc.: 91.48	CLS Loss: 0.24	Mixup Loss: 0.79	CRL Loss: 0.14	Tot. Loss: 1.06
+2025-03-28 04:36:24,946 INFO Epoch 5 	 Batch 499	LR : 0.00957	Top1 Acc.: 91.28	CLS Loss: 0.25	Mixup Loss: 0.80	CRL Loss: 0.14	Tot. Loss: 1.08
+2025-03-28 04:38:39,514 INFO Epoch 5 	 Batch 599	LR : 0.00957	Top1 Acc.: 90.72	CLS Loss: 0.25	Mixup Loss: 0.79	CRL Loss: 0.14	Tot. Loss: 1.08
+2025-03-28 04:40:54,135 INFO Epoch 5 	 Batch 699	LR : 0.00957	Top1 Acc.: 90.28	CLS Loss: 0.26	Mixup Loss: 0.80	CRL Loss: 0.15	Tot. Loss: 1.09
+2025-03-28 04:42:00,190 INFO ################## 
+ ---> Validation Epoch 5	Acc.: 93.452	FPR: 50.646	AUROC: 90.595	AUPR: 39.099	AURC: 9.271	EAURC: 7.079	AUPR Succ.: 99.254	ECE: 6.326	NLL: 2.120	Brier: 10.660
+2025-03-28 04:42:00,192 INFO ####### --- Training Epoch 6 --- #######
+2025-03-28 04:44:15,325 INFO Epoch 6 	 Batch 99	LR : 0.00933	Top1 Acc.: 92.06	CLS Loss: 0.22	Mixup Loss: 0.78	CRL Loss: 0.12	Tot. Loss: 1.02
+2025-03-28 04:46:29,823 INFO Epoch 6 	 Batch 199	LR : 0.00933	Top1 Acc.: 92.12	CLS Loss: 0.22	Mixup Loss: 0.77	CRL Loss: 0.13	Tot. Loss: 1.02
+2025-03-28 04:48:44,231 INFO Epoch 6 	 Batch 299	LR : 0.00933	Top1 Acc.: 91.55	CLS Loss: 0.24	Mixup Loss: 0.79	CRL Loss: 0.14	Tot. Loss: 1.05
+2025-03-28 04:50:58,615 INFO Epoch 6 	 Batch 399	LR : 0.00933	Top1 Acc.: 91.78	CLS Loss: 0.22	Mixup Loss: 0.77	CRL Loss: 0.13	Tot. Loss: 1.02
+2025-03-28 04:53:12,915 INFO Epoch 6 	 Batch 499	LR : 0.00933	Top1 Acc.: 91.64	CLS Loss: 0.23	Mixup Loss: 0.77	CRL Loss: 0.13	Tot. Loss: 1.02
+2025-03-28 04:55:27,371 INFO Epoch 6 	 Batch 599	LR : 0.00933	Top1 Acc.: 91.55	CLS Loss: 0.23	Mixup Loss: 0.78	CRL Loss: 0.13	Tot. Loss: 1.03
+2025-03-28 04:57:41,567 INFO Epoch 6 	 Batch 699	LR : 0.00933	Top1 Acc.: 92.17	CLS Loss: 0.23	Mixup Loss: 0.78	CRL Loss: 0.13	Tot. Loss: 1.04
+2025-03-28 04:58:47,536 INFO ################## 
+ ---> Validation Epoch 6	Acc.: 93.147	FPR: 57.778	AUROC: 88.143	AUPR: 33.952	AURC: 12.384	EAURC: 9.980	AUPR Succ.: 98.944	ECE: 6.224	NLL: 2.265	Brier: 11.478
+2025-03-28 04:58:47,538 INFO ####### --- Training Epoch 7 --- #######
+2025-03-28 05:01:02,372 INFO Epoch 7 	 Batch 99	LR : 0.00905	Top1 Acc.: 91.72	CLS Loss: 0.23	Mixup Loss: 0.78	CRL Loss: 0.12	Tot. Loss: 1.03
+2025-03-28 05:03:16,384 INFO Epoch 7 	 Batch 199	LR : 0.00905	Top1 Acc.: 92.06	CLS Loss: 0.22	Mixup Loss: 0.78	CRL Loss: 0.13	Tot. Loss: 1.03
+2025-03-28 05:05:30,559 INFO Epoch 7 	 Batch 299	LR : 0.00905	Top1 Acc.: 92.31	CLS Loss: 0.22	Mixup Loss: 0.78	CRL Loss: 0.12	Tot. Loss: 1.02
+2025-03-28 05:07:44,792 INFO Epoch 7 	 Batch 399	LR : 0.00905	Top1 Acc.: 91.97	CLS Loss: 0.22	Mixup Loss: 0.78	CRL Loss: 0.12	Tot. Loss: 1.02
+2025-03-28 05:09:58,994 INFO Epoch 7 	 Batch 499	LR : 0.00905	Top1 Acc.: 91.88	CLS Loss: 0.23	Mixup Loss: 0.77	CRL Loss: 0.13	Tot. Loss: 1.03
+2025-03-28 05:12:13,209 INFO Epoch 7 	 Batch 599	LR : 0.00905	Top1 Acc.: 92.44	CLS Loss: 0.21	Mixup Loss: 0.77	CRL Loss: 0.12	Tot. Loss: 1.01
+2025-03-28 05:14:27,538 INFO Epoch 7 	 Batch 699	LR : 0.00905	Top1 Acc.: 93.05	CLS Loss: 0.20	Mixup Loss: 0.76	CRL Loss: 0.12	Tot. Loss: 0.99
+2025-03-28 05:15:33,664 INFO ################## 
+ ---> Validation Epoch 7	Acc.: 94.552	FPR: 51.242	AUROC: 91.132	AUPR: 34.834	AURC: 7.117	EAURC: 5.605	AUPR Succ.: 99.415	ECE: 7.735	NLL: 2.061	Brier: 9.758
+2025-03-28 05:15:33,664 INFO Accuracy improved from 93.98 to 94.55!!!
+2025-03-28 05:15:34,314 INFO ####### --- Training Epoch 8 --- #######
+2025-03-28 05:17:49,115 INFO Epoch 8 	 Batch 99	LR : 0.00872	Top1 Acc.: 92.19	CLS Loss: 0.21	Mixup Loss: 0.78	CRL Loss: 0.12	Tot. Loss: 1.02
+2025-03-28 05:20:03,367 INFO Epoch 8 	 Batch 199	LR : 0.00872	Top1 Acc.: 93.03	CLS Loss: 0.20	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.98
+2025-03-28 05:22:17,822 INFO Epoch 8 	 Batch 299	LR : 0.00872	Top1 Acc.: 92.52	CLS Loss: 0.21	Mixup Loss: 0.77	CRL Loss: 0.12	Tot. Loss: 1.00
+2025-03-28 05:24:32,157 INFO Epoch 8 	 Batch 399	LR : 0.00872	Top1 Acc.: 92.78	CLS Loss: 0.20	Mixup Loss: 0.78	CRL Loss: 0.11	Tot. Loss: 1.00
+2025-03-28 05:26:46,684 INFO Epoch 8 	 Batch 499	LR : 0.00872	Top1 Acc.: 92.31	CLS Loss: 0.22	Mixup Loss: 0.77	CRL Loss: 0.12	Tot. Loss: 1.01
+2025-03-28 05:29:00,939 INFO Epoch 8 	 Batch 599	LR : 0.00872	Top1 Acc.: 92.28	CLS Loss: 0.22	Mixup Loss: 0.78	CRL Loss: 0.12	Tot. Loss: 1.02
+2025-03-28 05:31:15,212 INFO Epoch 8 	 Batch 699	LR : 0.00872	Top1 Acc.: 92.47	CLS Loss: 0.21	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 1.00
+2025-03-28 05:32:21,152 INFO ################## 
+ ---> Validation Epoch 8	Acc.: 93.655	FPR: 53.067	AUROC: 90.025	AUPR: 36.755	AURC: 9.519	EAURC: 7.462	AUPR Succ.: 99.214	ECE: 6.282	NLL: 2.114	Brier: 10.502
+2025-03-28 05:32:21,154 INFO ####### --- Training Epoch 9 --- #######
+2025-03-28 05:34:35,005 INFO Epoch 9 	 Batch 99	LR : 0.00835	Top1 Acc.: 92.84	CLS Loss: 0.21	Mixup Loss: 0.77	CRL Loss: 0.11	Tot. Loss: 1.00
+2025-03-28 05:36:47,551 INFO Epoch 9 	 Batch 199	LR : 0.00835	Top1 Acc.: 92.89	CLS Loss: 0.20	Mixup Loss: 0.77	CRL Loss: 0.11	Tot. Loss: 0.99
+2025-03-28 05:38:59,717 INFO Epoch 9 	 Batch 299	LR : 0.00835	Top1 Acc.: 93.31	CLS Loss: 0.19	Mixup Loss: 0.77	CRL Loss: 0.11	Tot. Loss: 0.98
+2025-03-28 05:41:11,932 INFO Epoch 9 	 Batch 399	LR : 0.00835	Top1 Acc.: 93.12	CLS Loss: 0.20	Mixup Loss: 0.77	CRL Loss: 0.11	Tot. Loss: 0.99
+2025-03-28 05:43:24,026 INFO Epoch 9 	 Batch 499	LR : 0.00835	Top1 Acc.: 93.56	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.97
+2025-03-28 05:45:36,186 INFO Epoch 9 	 Batch 599	LR : 0.00835	Top1 Acc.: 92.56	CLS Loss: 0.20	Mixup Loss: 0.77	CRL Loss: 0.12	Tot. Loss: 0.99
+2025-03-28 05:47:48,336 INFO Epoch 9 	 Batch 699	LR : 0.00835	Top1 Acc.: 93.08	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.98
+2025-03-28 05:48:53,503 INFO ################## 
+ ---> Validation Epoch 9	Acc.: 93.875	FPR: 45.856	AUROC: 91.670	AUPR: 38.368	AURC: 7.792	EAURC: 5.876	AUPR Succ.: 99.382	ECE: 5.399	NLL: 1.905	Brier: 9.617
+2025-03-28 05:48:53,504 INFO ####### --- Training Epoch 10 --- #######
+2025-03-28 05:51:06,039 INFO Epoch 10 	 Batch 99	LR : 0.00794	Top1 Acc.: 93.11	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.97
+2025-03-28 05:53:17,869 INFO Epoch 10 	 Batch 199	LR : 0.00794	Top1 Acc.: 93.00	CLS Loss: 0.19	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.97
+2025-03-28 05:55:29,730 INFO Epoch 10 	 Batch 299	LR : 0.00794	Top1 Acc.: 93.47	CLS Loss: 0.19	Mixup Loss: 0.77	CRL Loss: 0.11	Tot. Loss: 0.98
+2025-03-28 05:57:41,553 INFO Epoch 10 	 Batch 399	LR : 0.00794	Top1 Acc.: 93.23	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.97
+2025-03-28 05:59:52,500 INFO Epoch 10 	 Batch 499	LR : 0.00794	Top1 Acc.: 93.84	CLS Loss: 0.18	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.96
+2025-03-28 06:02:03,432 INFO Epoch 10 	 Batch 599	LR : 0.00794	Top1 Acc.: 93.45	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.98
+2025-03-28 06:04:14,423 INFO Epoch 10 	 Batch 699	LR : 0.00794	Top1 Acc.: 93.33	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.11	Tot. Loss: 0.98
+2025-03-28 06:05:19,102 INFO ################## 
+ ---> Validation Epoch 10	Acc.: 87.157	FPR: 72.464	AUROC: 83.576	AUPR: 38.724	AURC: 34.610	EAURC: 25.985	AUPR Succ.: 97.115	ECE: 1.569	NLL: 3.244	Brier: 18.657
+2025-03-28 06:05:19,104 INFO ####### --- Training Epoch 11 --- #######
+2025-03-28 06:07:30,663 INFO Epoch 11 	 Batch 99	LR : 0.00750	Top1 Acc.: 94.08	CLS Loss: 0.17	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.95
+2025-03-28 06:09:41,705 INFO Epoch 11 	 Batch 199	LR : 0.00750	Top1 Acc.: 93.33	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.97
+2025-03-28 06:11:52,605 INFO Epoch 11 	 Batch 299	LR : 0.00750	Top1 Acc.: 94.05	CLS Loss: 0.18	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:14:03,661 INFO Epoch 11 	 Batch 399	LR : 0.00750	Top1 Acc.: 92.84	CLS Loss: 0.19	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.98
+2025-03-28 06:16:14,680 INFO Epoch 11 	 Batch 499	LR : 0.00750	Top1 Acc.: 93.25	CLS Loss: 0.19	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:18:25,765 INFO Epoch 11 	 Batch 599	LR : 0.00750	Top1 Acc.: 94.34	CLS Loss: 0.17	Mixup Loss: 0.74	CRL Loss: 0.10	Tot. Loss: 0.94
+2025-03-28 06:20:36,794 INFO Epoch 11 	 Batch 699	LR : 0.00750	Top1 Acc.: 93.52	CLS Loss: 0.19	Mixup Loss: 0.77	CRL Loss: 0.10	Tot. Loss: 0.98
+2025-03-28 06:21:41,460 INFO ################## 
+ ---> Validation Epoch 11	Acc.: 95.059	FPR: 40.753	AUROC: 93.419	AUPR: 41.585	AURC: 4.827	EAURC: 3.586	AUPR Succ.: 99.627	ECE: 6.905	NLL: 1.797	Brier: 8.334
+2025-03-28 06:21:41,460 INFO Accuracy improved from 94.55 to 95.06!!!
+2025-03-28 06:21:42,047 INFO ####### --- Training Epoch 12 --- #######
+2025-03-28 06:23:53,766 INFO Epoch 12 	 Batch 99	LR : 0.00703	Top1 Acc.: 93.28	CLS Loss: 0.19	Mixup Loss: 0.74	CRL Loss: 0.10	Tot. Loss: 0.95
+2025-03-28 06:26:06,196 INFO Epoch 12 	 Batch 199	LR : 0.00703	Top1 Acc.: 93.80	CLS Loss: 0.18	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:28:19,809 INFO Epoch 12 	 Batch 299	LR : 0.00703	Top1 Acc.: 93.70	CLS Loss: 0.18	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.95
+2025-03-28 06:30:33,638 INFO Epoch 12 	 Batch 399	LR : 0.00703	Top1 Acc.: 93.59	CLS Loss: 0.18	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.95
+2025-03-28 06:32:47,576 INFO Epoch 12 	 Batch 499	LR : 0.00703	Top1 Acc.: 93.78	CLS Loss: 0.18	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:35:01,659 INFO Epoch 12 	 Batch 599	LR : 0.00703	Top1 Acc.: 93.86	CLS Loss: 0.18	Mixup Loss: 0.75	CRL Loss: 0.09	Tot. Loss: 0.94
+2025-03-28 06:37:15,735 INFO Epoch 12 	 Batch 699	LR : 0.00703	Top1 Acc.: 94.16	CLS Loss: 0.17	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.94
+2025-03-28 06:38:21,476 INFO ################## 
+ ---> Validation Epoch 12	Acc.: 95.651	FPR: 35.019	AUROC: 94.157	AUPR: 41.919	AURC: 3.792	EAURC: 2.833	AUPR Succ.: 99.707	ECE: 6.304	NLL: 1.609	Brier: 7.390
+2025-03-28 06:38:21,477 INFO Accuracy improved from 95.06 to 95.65!!!
+2025-03-28 06:38:22,021 INFO ####### --- Training Epoch 13 --- #######
+2025-03-28 06:40:36,565 INFO Epoch 13 	 Batch 99	LR : 0.00655	Top1 Acc.: 93.56	CLS Loss: 0.18	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:42:50,639 INFO Epoch 13 	 Batch 199	LR : 0.00655	Top1 Acc.: 94.36	CLS Loss: 0.17	Mixup Loss: 0.76	CRL Loss: 0.09	Tot. Loss: 0.95
+2025-03-28 06:45:04,671 INFO Epoch 13 	 Batch 299	LR : 0.00655	Top1 Acc.: 94.45	CLS Loss: 0.17	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.94
+2025-03-28 06:47:18,808 INFO Epoch 13 	 Batch 399	LR : 0.00655	Top1 Acc.: 94.48	CLS Loss: 0.16	Mixup Loss: 0.75	CRL Loss: 0.09	Tot. Loss: 0.93
+2025-03-28 06:49:33,015 INFO Epoch 13 	 Batch 499	LR : 0.00655	Top1 Acc.: 93.69	CLS Loss: 0.18	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:51:47,166 INFO Epoch 13 	 Batch 599	LR : 0.00655	Top1 Acc.: 93.91	CLS Loss: 0.17	Mixup Loss: 0.77	CRL Loss: 0.10	Tot. Loss: 0.96
+2025-03-28 06:54:01,274 INFO Epoch 13 	 Batch 699	LR : 0.00655	Top1 Acc.: 93.73	CLS Loss: 0.18	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.95
+2025-03-28 06:55:07,107 INFO ################## 
+ ---> Validation Epoch 13	Acc.: 96.024	FPR: 33.617	AUROC: 94.284	AUPR: 38.986	AURC: 3.344	EAURC: 2.542	AUPR Succ.: 99.738	ECE: 5.760	NLL: 1.482	Brier: 6.689
+2025-03-28 06:55:07,107 INFO Accuracy improved from 95.65 to 96.02!!!
+2025-03-28 06:55:07,722 INFO ####### --- Training Epoch 14 --- #######
+2025-03-28 06:57:22,352 INFO Epoch 14 	 Batch 99	LR : 0.00604	Top1 Acc.: 94.72	CLS Loss: 0.15	Mixup Loss: 0.75	CRL Loss: 0.09	Tot. Loss: 0.92
+2025-03-28 06:59:36,812 INFO Epoch 14 	 Batch 199	LR : 0.00604	Top1 Acc.: 94.55	CLS Loss: 0.16	Mixup Loss: 0.73	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:01:51,094 INFO Epoch 14 	 Batch 299	LR : 0.00604	Top1 Acc.: 94.25	CLS Loss: 0.16	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.92
+2025-03-28 07:04:05,345 INFO Epoch 14 	 Batch 399	LR : 0.00604	Top1 Acc.: 94.28	CLS Loss: 0.17	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.94
+2025-03-28 07:06:33,655 INFO Epoch 14 	 Batch 499	LR : 0.00604	Top1 Acc.: 94.22	CLS Loss: 0.17	Mixup Loss: 0.75	CRL Loss: 0.09	Tot. Loss: 0.94
+2025-03-28 07:08:47,995 INFO Epoch 14 	 Batch 599	LR : 0.00604	Top1 Acc.: 94.41	CLS Loss: 0.17	Mixup Loss: 0.76	CRL Loss: 0.10	Tot. Loss: 0.94
+2025-03-28 07:11:02,273 INFO Epoch 14 	 Batch 699	LR : 0.00604	Top1 Acc.: 94.59	CLS Loss: 0.16	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.92
+2025-03-28 07:12:08,160 INFO ################## 
+ ---> Validation Epoch 14	Acc.: 96.277	FPR: 40.000	AUROC: 92.945	AUPR: 38.855	AURC: 3.751	EAURC: 3.049	AUPR Succ.: 99.686	ECE: 5.218	NLL: 1.424	Brier: 6.501
+2025-03-28 07:12:08,160 INFO Accuracy improved from 96.02 to 96.28!!!
+2025-03-28 07:12:08,761 INFO ####### --- Training Epoch 15 --- #######
+2025-03-28 07:14:23,643 INFO Epoch 15 	 Batch 99	LR : 0.00552	Top1 Acc.: 94.80	CLS Loss: 0.16	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.92
+2025-03-28 07:16:38,065 INFO Epoch 15 	 Batch 199	LR : 0.00552	Top1 Acc.: 94.67	CLS Loss: 0.16	Mixup Loss: 0.75	CRL Loss: 0.09	Tot. Loss: 0.93
+2025-03-28 07:18:52,237 INFO Epoch 15 	 Batch 299	LR : 0.00552	Top1 Acc.: 94.89	CLS Loss: 0.15	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:21:06,593 INFO Epoch 15 	 Batch 399	LR : 0.00552	Top1 Acc.: 94.81	CLS Loss: 0.15	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:23:21,004 INFO Epoch 15 	 Batch 499	LR : 0.00552	Top1 Acc.: 94.11	CLS Loss: 0.17	Mixup Loss: 0.75	CRL Loss: 0.10	Tot. Loss: 0.94
+2025-03-28 07:25:35,450 INFO Epoch 15 	 Batch 599	LR : 0.00552	Top1 Acc.: 94.33	CLS Loss: 0.16	Mixup Loss: 0.75	CRL Loss: 0.09	Tot. Loss: 0.92
+2025-03-28 07:27:50,792 INFO Epoch 15 	 Batch 699	LR : 0.00552	Top1 Acc.: 95.22	CLS Loss: 0.15	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.90
+2025-03-28 07:28:57,151 INFO ################## 
+ ---> Validation Epoch 15	Acc.: 95.482	FPR: 42.322	AUROC: 92.776	AUPR: 35.990	AURC: 4.834	EAURC: 3.798	AUPR Succ.: 99.606	ECE: 6.402	NLL: 1.687	Brier: 7.864
+2025-03-28 07:28:57,152 INFO ####### --- Training Epoch 16 --- #######
+2025-03-28 07:31:13,049 INFO Epoch 16 	 Batch 99	LR : 0.00500	Top1 Acc.: 94.66	CLS Loss: 0.15	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.92
+2025-03-28 07:33:28,681 INFO Epoch 16 	 Batch 199	LR : 0.00500	Top1 Acc.: 95.03	CLS Loss: 0.15	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.90
+2025-03-28 07:35:44,162 INFO Epoch 16 	 Batch 299	LR : 0.00500	Top1 Acc.: 94.53	CLS Loss: 0.16	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:37:59,615 INFO Epoch 16 	 Batch 399	LR : 0.00500	Top1 Acc.: 94.77	CLS Loss: 0.15	Mixup Loss: 0.73	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:40:15,197 INFO Epoch 16 	 Batch 499	LR : 0.00500	Top1 Acc.: 95.22	CLS Loss: 0.14	Mixup Loss: 0.73	CRL Loss: 0.08	Tot. Loss: 0.89
+2025-03-28 07:42:30,652 INFO Epoch 16 	 Batch 599	LR : 0.00500	Top1 Acc.: 94.58	CLS Loss: 0.15	Mixup Loss: 0.73	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:44:46,117 INFO Epoch 16 	 Batch 699	LR : 0.00500	Top1 Acc.: 95.19	CLS Loss: 0.15	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.91
+2025-03-28 07:45:52,543 INFO ################## 
+ ---> Validation Epoch 16	Acc.: 96.108	FPR: 39.130	AUROC: 93.930	AUPR: 33.273	AURC: 3.293	EAURC: 2.526	AUPR Succ.: 99.740	ECE: 5.532	NLL: 1.469	Brier: 6.840
+2025-03-28 07:45:52,544 INFO ####### --- Training Epoch 17 --- #######
+2025-03-28 07:48:08,672 INFO Epoch 17 	 Batch 99	LR : 0.00448	Top1 Acc.: 95.33	CLS Loss: 0.14	Mixup Loss: 0.72	CRL Loss: 0.08	Tot. Loss: 0.88
+2025-03-28 07:50:24,125 INFO Epoch 17 	 Batch 199	LR : 0.00448	Top1 Acc.: 95.38	CLS Loss: 0.14	Mixup Loss: 0.74	CRL Loss: 0.09	Tot. Loss: 0.90
+2025-03-28 07:52:39,495 INFO Epoch 17 	 Batch 299	LR : 0.00448	Top1 Acc.: 95.25	CLS Loss: 0.14	Mixup Loss: 0.73	CRL Loss: 0.08	Tot. Loss: 0.89
