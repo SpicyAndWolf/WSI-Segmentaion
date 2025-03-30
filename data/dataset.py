@@ -167,6 +167,7 @@ def get_loader(dataset, train_dir, val_dir, test_dir, batch_size, imb_factor, mo
     # edit
     elif dataset in ['WSI']:
         transform_train = torchvision.transforms.Compose([
+                                                        torchvision.transforms.Resize(256),
                                                         torchvision.transforms.RandomResizedCrop(224),
                                                         torchvision.transforms.RandomHorizontalFlip(),
                                                         torchvision.transforms.ToTensor(),

@@ -16,10 +16,9 @@ import data.dataset
 import utils.utils
 import utils.option
 from datetime import datetime
-
 import resource
 
-
+# 冻结BN层
 def freeze_bn_layers(model):
     for name, module in model.named_modules():
         if isinstance(module, torch.nn.BatchNorm2d):
@@ -27,29 +26,37 @@ def freeze_bn_layers(model):
             for param in module.parameters():
                 param.requires_grad = False
 
+# 设置最大打开文件数
 rlimit = resource.getrlimit(resource.RLIMIT_NOFILE)
 resource.setrlimit(resource.RLIMIT_NOFILE, (2048, rlimit[1]))
 
+# 读取参数
 args = utils.option.get_args_parser()
 torch.backends.cudnn.benchmark = True
 
-load_path = args.save_dir + '/' + args.data_name + '_' + args.model_name + '_' + args.optim_name + '-mixup' + '_' + str(
-    args.mixup_weight) + '-crl' + '_' + str(args.crl_weight)
-save_pth_path = os.path.join(args.save_dir,
-                             f"{args.data_name}_{args.model_name}_{args.optim_name}-mixup_{args.mixup_weight}-crl_{args.crl_weight}-finetune_{args.reweighting_type}")
-
+# 设置加载、保存路径
+load_path = args.save_dir + '/' + args.data_name + '_' + args.model_name + '_' + args.optim_name + '-mixup' + '_' + str(args.mixup_weight) + '-crl' + '_' + str(args.crl_weight)
+save_pth_path = os.path.join(args.save_dir, f"{args.data_name}_{args.model_name}_{args.optim_name}-mixup_{args.mixup_weight}-crl_{args.crl_weight}-finetune_{args.reweighting_type}")
 if not os.path.exists(load_path):
     os.makedirs(load_path)
     os.makedirs(save_pth_path)
+
+# 设置TensorBoard和Logger
 writer = torch.utils.tensorboard.SummaryWriter(save_pth_path)
 logger = utils.utils.get_logger(save_pth_path)
 logger.info(json.dumps(vars(args), indent=4, sort_keys=True))
+
+# 设置GPU
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-train_loader, valid_loader, _, nb_cls = data.dataset.get_loader(args.data_name, args.train_dir, args.val_dir,
-                                                                args.test_dir,
-                                                                args.batch_size, args.imb_factor, args.model_name)
+# 加载数据
+train_loader, valid_loader, _, nb_cls = data.dataset.get_loader(
+    args.data_name, args.train_dir, args.val_dir,
+    args.test_dir,
+    args.batch_size, args.imb_factor, args.model_name
+)
 
+# 开始训练
 for r in range(args.nb_run):
     prefix = '{:d} / {:d} Running'.format(r + 1, args.nb_run)
     logger.info(100 * '#' + '\n' + prefix)
@@ -57,7 +64,7 @@ for r in range(args.nb_run):
     ## define model, optimizer
     net = model.get_model.get_model(args.model_name, nb_cls, logger, args)
 
-    # edit
+    # edit: load state_dict
     state_dict = torch.load(os.path.join(load_path, f'best_acc_net_{r + 1}.pth'))  # edit
     state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}  # edit
     net.load_state_dict(state_dict, strict=True)  # edit
@@ -67,14 +74,18 @@ for r in range(args.nb_run):
     #     net = AveragedModel(net)
     # net.load_state_dict(torch.load(os.path.join(load_path, f'best_acc_net_{r + 1}.pth')))
     # freeze_bn_layers(net)
-    optimizer, cos_scheduler, swa_model, swa_scheduler = optim.get_optimizer_scheduler(args.model_name,
-                                                                                       args.optim_name,
-                                                                                       net,
-                                                                                       args.fine_tune_lr,
-                                                                                       args.momentum,
-                                                                                       args.weight_decay,
-                                                                                       max_epoch_cos=args.epochs,
-                                                                                       swa_lr=args.swa_lr)
+
+    # 定义优化器、学习率调度器
+    optimizer, cos_scheduler, swa_model, swa_scheduler = optim.get_optimizer_scheduler(
+        args.model_name,
+        args.optim_name,
+        net,
+        args.fine_tune_lr,
+        args.momentum,
+        args.weight_decay,
+        max_epoch_cos=args.epochs,
+        swa_lr=args.swa_lr
+    )
 
     # make logger
     correct_log, best_acc, best_auroc, best_aurc = train_finetune.Correctness_Log(len(train_loader.dataset)), 0, 0, 1e6
@@ -83,14 +94,18 @@ for r in range(args.nb_run):
     # start Train
     for epoch in range(1, args.fine_tune_epochs + 2):
         startTime=datetime.now()
+
+        # 在第1个epoch之后，加载confidence_scores
         if epoch > 1:
-            # 在第1个epoch之后，加载confidence_scores
             confidence_scores_path = os.path.join(save_pth_path, 'confidence_scores.npy')
             if os.path.exists(confidence_scores_path):
                 confidence_scores = np.load(confidence_scores_path)
                 logger.info('re-weighting...')
+        
+        # 训练
         train_finetune.train(train_loader, net, optimizer, epoch, correct_log, logger, writer, args, confidence_scores)
 
+        # update swa model
         if args.optim_name in ['swa', 'fmfp']:
             if epoch > args.swa_epoch_start:
                 swa_model.update_parameters(net)
@@ -111,10 +126,12 @@ for r in range(args.nb_run):
         msg = '################## \n ---> Validation Epoch {:d}\t'.format(epoch) + '\t'.join(log)
         logger.info(msg)
 
+        # 写入TensorBoard
         for key in res:
             if r < 1:
                 writer.add_scalar('./Val/' + key, res[key], epoch)
 
+        # 保存最好的模型
         if res['Acc.'] > best_acc:
             acc = res['Acc.']
             msg = f'Accuracy improved from {best_acc:.2f} to {acc:.2f}!!!'
