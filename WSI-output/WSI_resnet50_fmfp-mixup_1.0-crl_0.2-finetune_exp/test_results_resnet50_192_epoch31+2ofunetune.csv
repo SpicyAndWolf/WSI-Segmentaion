@@ -1,0 +1,3 @@
+﻿WSI,resnet50,patch_size_192,epoch_31+finetune20,test_num_10000_patches
+MSP_results,Acc.,AUROC,AUPR Succ.,AUPR,FPR,AURC,EAURC,ECE,NLL,Brier
+,97.47±nan,95.28±nan,99.86±nan,39.09±nan,25.00±nan,1.66±nan,1.33±nan,1.15±nan,0.76±nan,3.81±nan

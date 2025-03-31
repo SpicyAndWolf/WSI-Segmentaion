@@ -25,8 +25,7 @@ def test():
     results_storage = {metric: [] for metric in metrics}
     cor_results_all_models = {}
 
-    save_path = os.path.join(args.save_dir,
-                             f"{args.data_name}_{args.model_name}_{args.optim_name}-mixup_{args.mixup_weight}-crl_{args.crl_weight}")
+    save_path = os.path.join(args.save_dir, f"{args.data_name}_{args.model_name}_{args.optim_name}-mixup_{args.mixup_weight}-crl_{args.crl_weight}")
     logger = utils.utils.get_logger(save_path)
 
     for r in range(args.nb_run):
