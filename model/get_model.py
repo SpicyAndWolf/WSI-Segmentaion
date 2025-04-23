@@ -22,6 +22,16 @@ def get_model(model_name, nb_cls, logger, args):
         pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in net_dict and 'fc' not in k}
         net_dict.update(pretrained_dict)
         net.load_state_dict(net_dict, strict=False)
+    elif model_name == 'efficientnet_b3': # edit
+        net = torchvision.models.efficientnet_b3(pretrained=True)
+        feat_dim = 1536  # EfficientNet-B3的特征维度
+        classifier = model.classifier.Classifier(feat_dim, nb_cls, args.cos_temp)
+        net.classifier = classifier
+    elif model_name == 'efficientnet_b2': # edit
+        net = torchvision.models.efficientnet_b2(pretrained=True)
+        feat_dim = 1408  # EfficientNet-B3的特征维度
+        classifier = model.classifier.Classifier(feat_dim, nb_cls, args.cos_temp)
+        net.classifier = classifier
     elif model_name == 'densenet':
         net = model.densenet_BC.DenseNet3(depth=100,
                                           num_classes=nb_cls,

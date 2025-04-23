@@ -33,8 +33,7 @@ logger = utils.utils.get_logger(save_path)
 logger.info(json.dumps(vars(args), indent=4, sort_keys=True))
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-train_loader, valid_loader, _, nb_cls = data.dataset.get_loader(args.data_name, args.train_dir, args.val_dir,args.test_dir,
-                                                                      args.batch_size, args.imb_factor, args.model_name)
+train_loader, valid_loader, _, nb_cls = data.dataset.get_loader(args.data_name, args.train_dir, args.val_dir,args.test_dir, args.batch_size, args.imb_factor, args.model_name)
 
 for r in range(args.nb_run):
     prefix = '{:d} / {:d} Running'.format(r + 1, args.nb_run)
@@ -44,8 +43,6 @@ for r in range(args.nb_run):
     net = model.get_model.get_model(args.model_name, nb_cls, logger, args)
     print(net)
 
-    # edit
-    net = torch.nn.DataParallel(net).cuda()
     # net = net.cuda()  # 单卡情况
 
     if args.resume:
@@ -54,18 +51,20 @@ for r in range(args.nb_run):
         state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}
         net.load_state_dict(state_dict, strict=True)
         net = torch.nn.DataParallel(net).cuda()
-        # if args.optim_name == 'fmfp' or args.optim_name == 'swa':
-        #     net = AveragedModel(net)
-        # net.load_state_dict(torch.load(os.path.join(save_path, f'best_acc_net_{r + 1}.pth')))
         logger.info(f"Loading checkpoints from {save_path}")
-    optimizer, cos_scheduler, swa_model, swa_scheduler = optim.get_optimizer_scheduler(args.model_name,
-                                                                                        args.optim_name,
-                                                                                        net,
-                                                                                        args.lr,
-                                                                                        args.momentum,
-                                                                                        args.weight_decay,
-                                                                                        max_epoch_cos = args.epochs,
-                                                                                        swa_lr = args.swa_lr)
+    # edit
+    else:
+        net = torch.nn.DataParallel(net).cuda()
+    optimizer, cos_scheduler, swa_model, swa_scheduler = optim.get_optimizer_scheduler(
+        args.model_name,
+        args.optim_name,
+        net,
+        args.lr,
+        args.momentum,
+        args.weight_decay,
+        max_epoch_cos = args.epochs,
+        swa_lr = args.swa_lr
+    )
 
 
     # make logger
