@@ -1,8 +1,13 @@
 <script setup>
-import { ref, computed } from "vue";
-import { ElButton, ElSwitch, ElInput, ElTooltip, ElIcon, ElCheckbox, ElLoading } from "element-plus";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import axios from "axios";
+import { ElButton, ElSwitch, ElInput, ElTooltip, ElIcon, ElCheckbox, ElLoading, ElMessage } from "element-plus";
 import { ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import "element-plus/dist/index.css";
+import { io } from "socket.io-client";
+
+// 定义API端口
+const API_URL = import.meta.env.VITE_API_URL;
 
 // ToolBar基本参数
 const isSidebarVisible = ref(true); // 控制侧边栏显示/隐藏
@@ -15,14 +20,45 @@ const selectedFiles = ref([]); // 存储选中的文件名
 const selectAll = ref(false); // 全选状态
 const currentFile = ref(null); // 当前查看的文件
 
-// 模拟文件列表数据
-const mockFiles = ["wsi_sample1.svs", "wsi_sample2.svs", "wsi_sample3.svs", "wsi_sample4.svs"];
-
-// 模拟分析状态和结果
-const analysisStatus = ref({
-  "wsi_sample1.svs": { status: "completed", tsr: 0.75, segmentationUrl: "https://i.vgy.me/QgKIBP.png" },
-});
+// 分析状态和结果
+const analysisStatus = ref({}); // 存储每个文件的分析状态
 const isAnalyzing = ref(false); // 是否正在分析
+
+// WebSocket 连接
+let socket = null;
+
+onMounted(() => {
+  socket = io(`${API_URL}`);
+  socket.on("connect", () => {
+    console.log("Socket.IO 连接已建立");
+  });
+  socket.on("file_processed", (data) => {
+    const fileName = data.file.slice(0, data.file.lastIndexOf("."));
+    const segmentationFileName = `${API_URL}/predictRes/${fileName}/${data.segmentationFileName}`;
+    analysisStatus.value[data.file] = {
+      status: data.status,
+      tsr: data.tsr,
+      segmentationUrl: segmentationFileName,
+    };
+    const allDone = selectedFiles.value.every((file) => analysisStatus.value[file]?.status === "completed");
+    if (allDone) {
+      isAnalyzing.value = false;
+    }
+    if (currentFile.value === data.file) {
+      currentFile.value = data.file;
+    }
+  });
+  socket.on("connect_error", (error) => {
+    console.error("Socket.IO 连接错误:", error);
+    ElMessage.error("Socket.IO 连接失败");
+  });
+});
+
+onUnmounted(() => {
+  if (socket) {
+    socket.disconnect();
+  }
+});
 
 // 切换侧边栏显示状态
 const toggleSidebar = () => {
@@ -30,9 +66,27 @@ const toggleSidebar = () => {
 };
 
 // 更新文件列表
-const updateFileList = () => {
-  console.log("更新文件列表，路径：", folderPath.value);
-  fileList.value = mockFiles;
+const updateFileList = async () => {
+  if (!folderPath.value) {
+    ElMessage.error("请输入文件夹路径");
+    return;
+  }
+
+  try {
+    const response = await axios.post(`${API_URL}/api/getFileList`, {
+      folderPath: folderPath.value,
+    });
+
+    if (response.data.success) {
+      fileList.value = response.data.files;
+      ElMessage.success("文件列表更新成功");
+    } else {
+      ElMessage.error(response.data.message || "获取文件列表失败");
+    }
+  } catch (error) {
+    console.error("获取文件列表失败:", error);
+    ElMessage.error("服务器错误，请检查后端服务");
+  }
 };
 
 // 全选/取消全选
@@ -51,7 +105,6 @@ const toggleFileSelection = (file) => {
   } else {
     selectedFiles.value.push(file);
   }
-  // 更新全选状态
   selectAll.value = selectedFiles.value.length === fileList.value.length;
 };
 
@@ -61,29 +114,28 @@ const viewFileAnalysis = (file) => {
 };
 
 // 开始分析
-const startAnalysis = () => {
+const startAnalysis = async () => {
   if (selectedFiles.value.length === 0) {
-    console.log("请先选择文件");
+    ElMessage.error("请先选择文件");
     return;
   }
   isAnalyzing.value = true;
-  console.log("开始分析选中的文件：", selectedFiles.value);
-
-  // 模拟分析过程
-  setTimeout(() => {
-    selectedFiles.value.forEach((file) => {
-      analysisStatus.value[file] = {
-        status: "completed",
-        tsr: Math.random().toFixed(2), // 模拟TSR结果
-        segmentationUrl: "https://i.vgy.me/QgKIBP.png", // 模拟分割图
-      };
+  try {
+    const response = await axios.post(`${API_URL}/api/analyze`, {
+      files: selectedFiles.value,
+      folderPath: folderPath.value,
     });
-    isAnalyzing.value = false;
-    // 如果当前查看的文件在分析列表中，更新显示
-    if (currentFile.value && selectedFiles.value.includes(currentFile.value)) {
-      currentFile.value = currentFile.value;
+    if (response.data.success) {
+      ElMessage.success("分析已开始");
+    } else {
+      ElMessage.error(response.data.message || "分析失败");
+      isAnalyzing.value = false;
     }
-  }, 2000); // 模拟2秒分析时间
+  } catch (error) {
+    console.error("分析失败:", error);
+    ElMessage.error("服务器错误，请检查后端服务");
+    isAnalyzing.value = false;
+  }
 };
 
 // 计算当前文件的显示状态
@@ -91,7 +143,11 @@ const currentFileStatus = computed(() => {
   if (!currentFile.value) {
     return { status: "none", message: "请从左侧选择一个文件" };
   }
-  if (isAnalyzing.value && selectedFiles.value.includes(currentFile.value)) {
+  if (
+    isAnalyzing.value &&
+    selectedFiles.value.includes(currentFile.value) &&
+    !analysisStatus.value[currentFile.value]
+  ) {
     return { status: "analyzing", message: "正在分析..." };
   }
   if (analysisStatus.value[currentFile.value]) {
@@ -110,7 +166,7 @@ const currentFileStatus = computed(() => {
     <!-- 顶部工具栏 -->
     <div class="toolbar">
       <!-- 侧边栏控制按钮 -->
-      <ElButton @click="toggleSidebar" type="Default" class="switch-fileList">
+      <ElButton @click="toggleSidebar" class="switch-fileList">
         <ElIcon>
           <component :is="isSidebarVisible ? ArrowLeft : ArrowRight" />
         </ElIcon>
@@ -127,7 +183,7 @@ const currentFileStatus = computed(() => {
       <!-- 文件夹路径输入 -->
       <div class="path-input-wrapper">
         <ElInput v-model="folderPath" placeholder="请输入WSI文件夹路径" clearable />
-        <ElButton type="primary" @click="updateFileList" class="update-fileList-btn"> 更新 </ElButton>
+        <ElButton @click="updateFileList" class="update-fileList-btn"> 更新 </ElButton>
       </div>
     </div>
 
@@ -234,12 +290,14 @@ const currentFileStatus = computed(() => {
 }
 
 .update-fileList-btn {
+  background-color: rgb(218, 219, 219);
   margin-left: 20px;
   margin-right: 10px;
   border-radius: 15px;
 }
 
 .update-fileList-btn:hover {
+  background-color: rgb(236, 245, 255);
   transform: scale(1.02);
 }
 
