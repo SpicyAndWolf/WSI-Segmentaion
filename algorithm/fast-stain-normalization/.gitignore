@@ -1,0 +1,16 @@
+source/*.png
+*.jpg
+*.jpeg
+*venv/
+*venv_tf/
+*venv_torch/
+*.py.bak
+*output_normalization
+*__pycache__/
+dist/
+torchstain*
+examples/__init__.py
+build/
+fastStainNorm.egg-info/
+test/
+.idea/
