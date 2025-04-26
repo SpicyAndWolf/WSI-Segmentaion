@@ -22,7 +22,6 @@ const currentFile = ref(null); // 当前查看的文件
 
 // 分析状态和结果
 const analysisStatus = ref({}); // 存储每个文件的分析状态
-const isAnalyzing = ref(false); // 是否正在分析
 
 // WebSocket 连接
 let socket = null;
@@ -33,16 +32,27 @@ onMounted(() => {
     console.log("Socket.IO 连接已建立");
   });
   socket.on("file_processed", (data) => {
-    const fileName = data.file.slice(0, data.file.lastIndexOf("."));
-    const segmentationFileName = `${API_URL}/predictRes/${fileName}/${data.segmentationFileName}`;
-    analysisStatus.value[data.file] = {
-      status: data.status,
-      tsr: data.tsr,
-      segmentationUrl: segmentationFileName,
-    };
-    const allDone = selectedFiles.value.every((file) => analysisStatus.value[file]?.status === "completed");
-    if (allDone) {
-      isAnalyzing.value = false;
+    if (data.status === "error") {
+      // 分析失败
+      ElMessage.error(`文件 ${data.file} 分析失败: ${data.message}`);
+
+      // 更新分析状态
+      analysisStatus.value[data.file] = {
+        status: data.status,
+        message: data.message,
+      };
+    } else if (data.status === "completed") {
+      // 分析成功
+      ElMessage.success(`文件 ${data.file} 分析完成`);
+      const fileName = data.file.slice(0, data.file.lastIndexOf("."));
+      const segmentationUrl = `${API_URL}/predictRes/${fileName}/${data.segmentationFileName}`;
+
+      // 更新分析状态
+      analysisStatus.value[data.file] = {
+        status: "completed",
+        tsr: data.tsr,
+        segmentationUrl: segmentationUrl,
+      };
     }
     if (currentFile.value === data.file) {
       currentFile.value = data.file;
@@ -119,22 +129,47 @@ const startAnalysis = async () => {
     ElMessage.error("请先选择文件");
     return;
   }
-  isAnalyzing.value = true;
+
+  // 过滤掉已知正在分析的文件
+  const filesToAnalyze = selectedFiles.value.filter((file) => analysisStatus.value[file]?.status !== "analyzing");
+  if (filesToAnalyze.length === 0) {
+    ElMessage.warning("所有选中的文件正在分析中");
+    return;
+  }
+
   try {
     const response = await axios.post(`${API_URL}/api/analyze`, {
-      files: selectedFiles.value,
+      files: filesToAnalyze,
       folderPath: folderPath.value,
     });
     if (response.data.success) {
       ElMessage.success("分析已开始");
+      const results = response.data.results;
+
+      // 更新每个选中文件（过滤后）的分析状态
+      results.forEach((result) => {
+        if (result.status === "completed") {
+          // 对于分析已完成的
+          const fileName = result.file.slice(0, result.file.lastIndexOf("."));
+          const segmentationUrl = `${API_URL}/predictRes/${fileName}/${result.segmentationFileName}`;
+          analysisStatus.value[result.file] = {
+            status: "completed",
+            tsr: result.tsr,
+            segmentationUrl: segmentationUrl,
+          };
+        } else if (result.status === "analyzing") {
+          // 如果文件正在处理
+          analysisStatus.value[result.file] = {
+            status: "analyzing",
+          };
+        }
+      });
     } else {
       ElMessage.error(response.data.message || "分析失败");
-      isAnalyzing.value = false;
     }
   } catch (error) {
     console.error("分析失败:", error);
     ElMessage.error("服务器错误，请检查后端服务");
-    isAnalyzing.value = false;
   }
 };
 
@@ -143,19 +178,19 @@ const currentFileStatus = computed(() => {
   if (!currentFile.value) {
     return { status: "none", message: "请从左侧选择一个文件" };
   }
-  if (
-    isAnalyzing.value &&
-    selectedFiles.value.includes(currentFile.value) &&
-    !analysisStatus.value[currentFile.value]
-  ) {
-    return { status: "analyzing", message: "正在分析..." };
-  }
-  if (analysisStatus.value[currentFile.value]) {
-    return {
-      status: analysisStatus.value[currentFile.value].status,
-      tsr: analysisStatus.value[currentFile.value].tsr,
-      segmentationUrl: analysisStatus.value[currentFile.value].segmentationUrl,
-    };
+  const status = analysisStatus.value[currentFile.value];
+  if (status) {
+    if (status.status === "completed") {
+      return {
+        status: "completed",
+        tsr: status.tsr,
+        segmentationUrl: status.segmentationUrl,
+      };
+    } else if (status.status === "error") {
+      return { status: "error", message: status.message };
+    } else if (status.status === "analyzing") {
+      return { status: "analyzing", message: "正在分析..." };
+    }
   }
   return { status: "not_analyzed", message: "尚未分析" };
 });
@@ -203,7 +238,13 @@ const currentFileStatus = computed(() => {
             v-for="file in fileList"
             :key="file"
             class="file-item"
-            :class="{ selected: selectedFiles.includes(file), 'current-file': file === currentFile }"
+            :class="{
+              selected: selectedFiles.includes(file),
+              'current-file': file === currentFile,
+              completed: analysisStatus[file]?.status === 'completed',
+              analyzing: analysisStatus[file]?.status === 'analyzing',
+              error: analysisStatus[file]?.status === 'error',
+            }"
             @click="toggleFileSelection(file)"
             @dblclick="viewFileAnalysis(file)"
           >
@@ -228,6 +269,9 @@ const currentFileStatus = computed(() => {
             <div v-else-if="currentFileStatus.status === 'analyzing'" class="status-message">
               <span>{{ currentFileStatus.message }}</span>
               <div class="loading"></div>
+            </div>
+            <div v-else-if="currentFileStatus.status === 'error'" class="status-message">
+              {{ currentFileStatus.message }}
             </div>
             <div v-else-if="currentFileStatus.status === 'not_analyzed'" class="status-message">
               {{ currentFileStatus.message }}
@@ -373,6 +417,17 @@ const currentFileStatus = computed(() => {
 
 .file-item.selected {
   background-color: rgb(227, 227, 227);
+}
+
+.file-item.completed {
+  color: rgb(36, 211, 13);
+}
+.file-item.analyzing {
+  color: rgb(14, 137, 238);
+}
+
+.file-item.error {
+  color: rgb(255, 0, 0);
 }
 
 .file-item.current-file {
