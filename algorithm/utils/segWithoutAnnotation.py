@@ -4,10 +4,10 @@ import numpy as np
 import os
 from datetime import datetime
 import configparser
+from utils.myLogger import setup_logger
 
-# config = configparser.ConfigParser()
-# config.read('config.ini')
-# base_magnification = int(config['DEFAULT']['base_magnification'])
+# 设置日志记录器
+logger = setup_logger()
 base_magnification = 40  # 基准放大倍率
 
 def get_tissue_part(slide_min, grey=None):
@@ -39,7 +39,7 @@ def get_tissue_part(slide_min, grey=None):
     
     # 创建一个空白图像，绘制所有有效轮廓。如果没有找到有效轮廓，打印警告，并返回全黑图像
     if not valid_contours:
-        print("Warning: No contours found with area greater than threshold.")
+        logger.warning("Warning: No contours found with area greater than threshold.")
         tissue_part = np.zeros_like(tissue_part)
     else:
         tissue_part = cv2.drawContours(np.zeros_like(tissue_part), valid_contours, -1, (255, 255, 255), -1)
@@ -125,12 +125,12 @@ def slide2patches(slide_fold, slide_file_name, patches_folder, model_patch_size=
 
     # 打印时间
     slide.close()
-    print(f"a slide cost Time: {datetime.now() - startTime}")
+    logger.info(f"a slide cost Time: {datetime.now() - startTime}")
 
 def seg_patches(slide_fold, slide_files_name, res_fold, model_patch_size=256):
     # 开始计时
     start = datetime.now()
-    print("start turn slide to patches...")
+    logger.info("start turn slide to patches...")
     
     # 打印所有参数
     all_config={
@@ -139,7 +139,7 @@ def seg_patches(slide_fold, slide_files_name, res_fold, model_patch_size=256):
         "res_fold": res_fold,
         "model_patch_size": model_patch_size
     }
-    print(all_config)
+    logger.info(all_config)
 
     # 遍历每个slide文件
     for slide_file_name in slide_files_name:
@@ -149,9 +149,9 @@ def seg_patches(slide_fold, slide_files_name, res_fold, model_patch_size=256):
             os.makedirs(patches_folder)
 
         # 开始切分
-        print("start seg patch：" + slide_file_name)
+        logger.info("start seg patch：" + slide_file_name)
         slide2patches(slide_fold, slide_file_name, patches_folder, model_patch_size)
-    print("all slides cost time: " + str(datetime.now() - start))
+    logger.info("all slides cost time: " + str(datetime.now() - start))
 
 if __name__ == "__main__":
     model_patch_size= 256

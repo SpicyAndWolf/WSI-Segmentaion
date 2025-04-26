@@ -5,18 +5,24 @@ from utils.segWithoutAnnotation import slide2patches
 from utils.predict import predict, mergePatches
 from datetime import datetime
 import os
+import logging
+from utils.myLogger import setup_logger
+
+# 设置日志记录器
+logger = setup_logger()
 
 # 读取后端传输的配置
 def parse_args():
     parser = argparse.ArgumentParser(description="Process slide images to patches.")
     parser.add_argument("--slide_folder", type=str, help="Path to the folder containing slide images")
     parser.add_argument("--slide_file_name", type=str, help="Name of the slide file to process")
+    parser.add_argument("--isSegmented", type=bool, default=False, help="Whether the slide is already segmented")
 
     # 解析参数
     args = parser.parse_args()
     return args
 
-def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_patch_size, ROOT_PATH, model_name, dict_name):
+def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_patch_size, model_name, dict_name, isSegmented):
     # 打印所有参数
     all_config={
         "slide_fold": slide_folder,
@@ -24,7 +30,7 @@ def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_pa
         "res_fold": slide_patches_base_folder,
         "model_patch_size": model_patch_size
     }
-    print(all_config)
+    logger.info(f"请求处理patch: {all_config}")
 
     # 创建存储patches的文件夹
     patches_folder = os.path.join(slide_patches_base_folder, slide_file_name, "origin-{}".format(model_patch_size))
@@ -32,23 +38,34 @@ def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_pa
         os.makedirs(patches_folder)
 
     # 开始切分
-    print("start seg patch：" + slide_file_name)
-    slide2patches(slide_folder, slide_file_name, patches_folder, model_patch_size)
+    if not isSegmented:
+        logger.info("开始分割 patch：" + slide_file_name)
+        slide2patches(slide_folder, slide_file_name, patches_folder, model_patch_size)
 
     # 预测
     df, patch_size = predict(slide_folder, slide_file_name)
-    mergePatches(slide_folder, slide_file_name, df, patch_size)
+    res_dir, segmentationFileName = mergePatches(slide_folder, slide_file_name, df, patch_size)
 
     # 模拟数据
     tsr = 0.85
-    segmentationFileName = f'predictionImg-{model_name}-{dict_name}-{slide_file_name}.png'
     
     # 输出 JSON 格式的结果
     result = {
+        "slideFileName": slide_file_name,
+        "slideFolder": slide_folder,
+        "modelPatchSize": model_patch_size,
+        "dictName": dict_name,
+        "modelName": model_name,
         "tsr": tsr,
-        "resName": segmentationFileName
+        "segmentationFileName": segmentationFileName
     }
-    print(json.dumps(result))
+    res_json_path = os.path.join(res_dir, f"{segmentationFileName}_result.json")
+    with open(res_json_path, 'w') as f:
+        json.dump(result, f)
+
+    # 返回 JSON 文件路径
+    logger.info(f"完成处理patch: {slide_file_name}")
+    print(json.dumps({"res_json_path": res_json_path}))
 
 if __name__ == "__main__":
     # 加载配置文件
@@ -66,6 +83,7 @@ if __name__ == "__main__":
     # 获取命令行中的参数
     slide_folder = args.slide_folder
     slide_file_name = os.path.splitext(args.slide_file_name)[0]
+    isSegmented = args.isSegmented
 
     # 切分patch
-    seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_patch_size, ROOT_PATH, model_name, dict_name)
+    seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_patch_size, model_name, dict_name, isSegmented)

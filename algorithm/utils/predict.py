@@ -14,6 +14,10 @@ from torchvision.datasets.folder import default_loader
 import math
 from scipy.ndimage import label
 from collections import Counter
+from utils.myLogger import setup_logger
+
+# 设置日志记录器
+logger = setup_logger()
 
 # 读取配置文件
 config = configparser.ConfigParser()
@@ -65,7 +69,7 @@ class PatchImageFolder(ImageFolder):
         for cls_name in self.classes:
             class_dir = os.path.join(self.root, cls_name)
             if not os.path.isdir(class_dir):
-                print(f"Warning: Directory {class_dir} does not exist. Skipping.")
+                logger.warning(f"Warning: Directory {class_dir} does not exist. Skipping.")
                 continue
             for root, _, fnames in sorted(os.walk(class_dir, followlinks=True)):
                 for fname in sorted(fnames):
@@ -227,7 +231,7 @@ def predict(slide_folder, slide_name):
     dataset = PatchImageFolder(root=image_dir, transform=transform)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-    print(f"start prediction for {slide_name}...")
+    logger.info(f"start prediction for {slide_name}...")
     start = datetime.now()
 
     # 收集所有预测结果
@@ -268,14 +272,14 @@ def predict(slide_folder, slide_name):
     output_file = os.path.join(res_dir, f"predictions-{model_name}-{dict_name}.csv")
     df.to_csv(output_file, index=False, columns=['patch', 'class', 'true_label', 'prob_0', 'prob_1', 'prob_2'])
 
-    print(f"predict for {slide_name} cost time: " + str(datetime.now() - start))
+    logger.info(f"predict for {slide_name} cost time: " + str(datetime.now() - start))
     return df, patch_size
 
 # 合并 patch 并生成带半透明掩码的图像
 def mergePatches(slide_folder, slide_name, df, patch_size):
     # 计时
     start = datetime.now()
-    print(f"start merging {slide_name}...")
+    logger.info(f"start merging {slide_name}...")
 
     # 打开切片图像
     slide_path = os.path.join(slide_folder, slide_name + ".svs")
@@ -313,7 +317,8 @@ def mergePatches(slide_folder, slide_name, df, patch_size):
 
     # 保存结果图像
     res_dir = os.path.join(ROOT_PATH, "public", "predictRes", slide_name)
-    output_path = os.path.join(res_dir, f'predictionImg-{model_name}-{dict_name}-{slide_name}.png')
+    res_img_name = f'predictionImg-{model_name}-{dict_name}-{slide_name}.png'
+    output_path = os.path.join(res_dir, res_img_name)
     plt.figure(figsize=(12, 12))
     plt.imshow(slide_image)
     plt.axis('off')
@@ -321,7 +326,8 @@ def mergePatches(slide_folder, slide_name, df, patch_size):
     plt.close()
 
     # 打印合并时间
-    print(f"merge for {slide_name} cost time: " + str(datetime.now() - start))
+    logger.info(f"merge for {slide_name} cost time: " + str(datetime.now() - start))
+    return res_dir, res_img_name
 
 def predict_slides(slide_folder, slide_files_name):
     for slide_file_name in slide_files_name:
