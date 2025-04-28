@@ -219,9 +219,13 @@ def predict(slide_folder, slide_name):
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-    # 设置路径
+    # 设置patch路径
     image_dir = os.path.join(slide_patches_base_folder, slide_name, "origin-{}".format(model_patch_size))
-    res_dir = os.path.join(ROOT_PATH, "public", "predictRes", slide_name)
+
+    # 设置结果路径
+    slide_folder_name = os.path.basename(slide_folder)
+    res_dir_name= slide_folder_name+"_"+slide_name
+    res_dir = os.path.join(ROOT_PATH, "public", "predictRes", res_dir_name)
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
 
@@ -273,10 +277,10 @@ def predict(slide_folder, slide_name):
     df.to_csv(output_file, index=False, columns=['patch', 'class', 'true_label', 'prob_0', 'prob_1', 'prob_2'])
 
     logger.info(f"predict for {slide_name} cost time: " + str(datetime.now() - start))
-    return df, patch_size
+    return df, patch_size, res_dir
 
 # 合并 patch 并生成带半透明掩码的图像
-def mergePatches(slide_folder, slide_name, df, patch_size):
+def mergePatches(slide_folder, slide_name, df, patch_size, res_dir):
     # 计时
     start = datetime.now()
     logger.info(f"start merging {slide_name}...")
@@ -316,7 +320,6 @@ def mergePatches(slide_folder, slide_name, df, patch_size):
         slide_image[:, :, c] = (1 - alpha) * slide_image[:, :, c] + alpha * mask[:, :, c]
 
     # 保存结果图像
-    res_dir = os.path.join(ROOT_PATH, "public", "predictRes", slide_name)
     res_img_name = f'predictionImg-{model_name}-{dict_name}-{slide_name}.png'
     output_path = os.path.join(res_dir, res_img_name)
     plt.figure(figsize=(12, 12))
@@ -327,12 +330,12 @@ def mergePatches(slide_folder, slide_name, df, patch_size):
 
     # 打印合并时间
     logger.info(f"merge for {slide_name} cost time: " + str(datetime.now() - start))
-    return res_dir, res_img_name
+    return res_img_name
 
 def predict_slides(slide_folder, slide_files_name):
     for slide_file_name in slide_files_name:
-        df, patch_size = predict(slide_folder, slide_file_name)
-        mergePatches(slide_folder, slide_file_name, df, patch_size)
+        df, patch_size, res_dir = predict(slide_folder, slide_file_name)
+        mergePatches(slide_folder, slide_file_name, df, patch_size, res_dir)
 
 
 if __name__ == "__main__":
@@ -344,5 +347,5 @@ if __name__ == "__main__":
         "1726363012"
     ]
     for slide_name in slide_names:
-        df, patch_size = predict(slide_folder, slide_name)
-        mergePatches(slide_folder, slide_name, df, patch_size)
+        df, patch_size, res_dir = predict(slide_folder, slide_name)
+        mergePatches(slide_folder, slide_name, df, patch_size, res_dir)

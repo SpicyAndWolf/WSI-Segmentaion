@@ -4,12 +4,13 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const fileRoutes = require("./routes/fileRoutes");
 const { Server } = require("socket.io");
 const http = require("http");
 
 // 路由定义
 const indexRouter = require("./routes/index");
+const fileRoutes = require("./routes/fileRoutes");
+const originImageRoutes = require("./routes/originImage");
 
 // 主程序
 const app = express();
@@ -22,10 +23,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // 挂载路由
-app.use(express.static(path.join(__dirname, "public")));
 app.use("/predictRes", express.static(path.join(__dirname, "public", "predictRes")));
+app.use("/originImage", express.static(path.join(__dirname, "public", "originImage")));
 app.use("/", indexRouter);
 app.use("/api", fileRoutes);
+app.use("/api", originImageRoutes);
 
 // 创建 Socket.IO 服务器
 const server = http.createServer(app);

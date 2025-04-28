@@ -5,17 +5,33 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import math
 import openslide
+import configparser
+from utils.myLogger import setup_logger
+
+# 设置日志记录器
+logger = setup_logger()
+
+# 获取当前脚本所在目录
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 构造配置文件的绝对路径
+config_path = os.path.join(script_dir, '..', '..','config.ini')
+
+# 读取配置文件
+config = configparser.ConfigParser()
+config.read(config_path)
 
 # 定义基本路径
-csv_base_path = "/home/zyf/Projects/WSI/New/predictRes"
+ROOT_PATH = config['DEFAULT']['ROOT_PATH']
+csv_base_folder = os.path.join(ROOT_PATH, "public", "predictRes")
 
 # 基本变量
-model_patch_size = 256
+model_patch_size = int(config['DEFAULT']['model_patch_size'])
 model_name = "resnet50-{}".format(model_patch_size)
-dict_name = 'epoch30+21-acc9819-finetune'
-base_magnification = 40
+dict_name = config['DEFAULT']['dict_name']
+base_magnification = config['DEFAULT'].getfloat('base_magnification', 40)  # 基础放大倍数
 
-def visualize_hotspot(grid, best_cy, best_cx, radius_grid, slide_name):
+def visualize_hotspot(res_folder, slide_name, grid, best_cy, best_cx, radius_grid):
     """
     可视化网格并标记热点区域。
     
@@ -63,11 +79,13 @@ def visualize_hotspot(grid, best_cy, best_cx, radius_grid, slide_name):
     ax.axis('off')
     
     # 保存图片
-    save_path = os.path.join(csv_base_path, slide_name, f"hotspot_{slide_name}.png")
+    hotspot_file_name = f"hotspot_{slide_name}.png"
+    save_path = os.path.join(res_folder, hotspot_file_name)
     plt.savefig(save_path, bbox_inches='tight', pad_inches=0.1)
     plt.close(fig)
+    return hotspot_file_name
 
-def calculate_hotspot_tsr(slide_name, mpp, magnification, delta=1, diameter_mm=2):
+def calculate_hotspot_tsr(slide_folder, slide_name, mpp, magnification, delta=1, diameter_mm=2):
     """
     计算指定WSI的热点区域TSR。
     
@@ -78,12 +96,14 @@ def calculate_hotspot_tsr(slide_name, mpp, magnification, delta=1, diameter_mm=2
         diameter_mm (float): 圆形区域的直径（毫米），默认为2
     """
     # 加载预测结果
-    csv_path = os.path.join(csv_base_path, slide_name)
-    csv_file = os.path.join(csv_path, f"predictions-{model_name}-{dict_name}.csv")
-    if not os.path.exists(csv_file):
-        print(f"Error: Prediction file {csv_file} does not exist.")
+    slide_folder_name = os.path.basename(slide_folder)
+    csv_folder_name = slide_folder_name+"_"+slide_name
+    csv_folder = os.path.join(csv_base_folder, csv_folder_name)
+    csv_path = os.path.join(csv_folder, f"predictions-{model_name}-{dict_name}.csv")
+    if not os.path.exists(csv_path):
+        logger.error(f"Error: Prediction file {csv_path} does not exist.")
         return
-    df = pd.read_csv(csv_file, header=0)
+    df = pd.read_csv(csv_path, header=0)
     df['class'] = df['class'].astype(int)
 
     # 提取坐标并构建网格
@@ -174,25 +194,30 @@ def calculate_hotspot_tsr(slide_name, mpp, magnification, delta=1, diameter_mm=2
                 max_tsr, best_circle_y, best_circle_x = tsr, circle_y, circle_x
     
     # 输出结果
+    hotspot_file_name= ""
     if best_circle_y is not None and best_circle_x is not None:
-        print(f"Slide: {slide_name}")
-        print(f"Hotspot center (grid coords): ({best_circle_y}, {best_circle_x})")
-        print(f"Hotspot TSR: {max_tsr:.2f}%")
-        visualize_hotspot(grid, best_circle_y, best_circle_x, radius_grid, slide_name)
+        logger.info(f"Slide: {slide_name}")
+        logger.info(f"Hotspot center (grid coords): ({best_circle_y}, {best_circle_x})")
+        logger.info(f"Hotspot TSR: {max_tsr:.2f}%")
+        hotspot_file_name=visualize_hotspot(csv_folder, slide_name, grid, best_circle_y, best_circle_x, radius_grid)
     else:
-        print(f"No suitable hotspot found for {slide_name}.")
+        logger.warning(f"No suitable hotspot found for {slide_name}.")
 
-def calculate_tsr(slide_name):
+    return max_tsr, hotspot_file_name
+
+def calculate_all_tsr(slide_folder, slide_name):
     """
     计算指定 WSI 的肿瘤间质比 (TSR)，直接使用降噪后的 prediction.csv。
     """
     # 加载预测结果
-    csv_path = os.path.join(csv_base_path, slide_name)
-    csv_file = os.path.join(csv_path, f"predictions-{model_name}-{dict_name}.csv")
-    if not os.path.exists(csv_file):
-        print(f"Error: Prediction file {csv_file} does not exist.")
+    slide_folder_name = os.path.basename(slide_folder)
+    csv_folder_name = slide_folder_name+"_"+slide_name
+    csv_folder = os.path.join(csv_base_folder, csv_folder_name)
+    csv_path = os.path.join(csv_folder, f"predictions-{model_name}-{dict_name}.csv")
+    if not os.path.exists(csv_path):
+        logger.error(f"Error: Prediction file {csv_path} does not exist.")
         return
-    df = pd.read_csv(csv_file, header=0)
+    df = pd.read_csv(csv_path, header=0)
 
     # 统计各类别patch数量
     df['class'] = df['class'].astype(int)
@@ -202,23 +227,37 @@ def calculate_tsr(slide_name):
     
     # 计算 TSR
     if total_count == 0:
-        print(f"Warning: No stroma or tumor patches found for {slide_name}. TSR cannot be calculated.")
+        logger.warning(f"Warning: No stroma or tumor patches found for {slide_name}. TSR cannot be calculated.")
         tsr = 0.0
     else:
         tsr = (stroma_count / total_count) * 100
     
-    print(f"Slide: {slide_name}")
-    print(f"Stroma patches: {stroma_count}")
-    print(f"Tumor patches: {tumor_count}")
-    print(f"TSR: {tsr:.2f}%")
+    logger.info(f"Slide: {slide_name}")
+    logger.info(f"Stroma patches: {stroma_count}")
+    logger.info(f"Tumor patches: {tumor_count}")
+    logger.info(f"TSR: {tsr:.2f}%")
+    return tsr
+
+def calculateTSR(slide_folder, slide_name):
+    """
+    计算指定 WSI 的肿瘤间质比 (TSR)，直接使用降噪后的 prediction.csv。
+    """
+
+    tsr = calculate_all_tsr(slide_folder, slide_name)
+    slide = openslide.OpenSlide(os.path.join(slide_folder, slide_name + ".svs"))
+    mpp = float(slide.properties.get('openslide.mpp-x', 0))
+    magnification = float(slide.properties.get('openslide.objective-power', 40))
+    tsr_hotspot, hotspot_file_name = calculate_hotspot_tsr(slide_folder, slide_name, mpp, magnification)
+    return tsr, tsr_hotspot, hotspot_file_name
+
 
 if __name__ == "__main__":
-    slide_fold = "/home/zyf/Database/WSI-notation/"
+    slide_folder = "E:/Downloads/slides"
     slides_name = ["2001549007_101728"]
     
     for slide_name in slides_name:
-        calculate_tsr(slide_name)
-        slide = openslide.OpenSlide(os.path.join(slide_fold, slide_name + ".svs"))
+        calculate_all_tsr(slide_folder, slide_name)
+        slide = openslide.OpenSlide(os.path.join(slide_folder, slide_name + ".svs"))
         mpp = float(slide.properties.get('openslide.mpp-x', 0))
         magnification = float(slide.properties.get('openslide.objective-power', 40))
-        calculate_hotspot_tsr(slide_name, mpp, magnification)
+        calculate_hotspot_tsr(slide_folder, slide_name, mpp, magnification)

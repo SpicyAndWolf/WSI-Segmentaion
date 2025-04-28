@@ -3,9 +3,9 @@ import json
 import configparser
 from utils.segWithoutAnnotation import slide2patches
 from utils.predict import predict, mergePatches
+from utils.calculateTSR import calculateTSR
 from datetime import datetime
 import os
-import logging
 from utils.myLogger import setup_logger
 
 # 设置日志记录器
@@ -43,11 +43,12 @@ def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_pa
         slide2patches(slide_folder, slide_file_name, patches_folder, model_patch_size)
 
     # 预测
-    df, patch_size = predict(slide_folder, slide_file_name)
-    res_dir, segmentationFileName = mergePatches(slide_folder, slide_file_name, df, patch_size)
+    df, patch_size, res_dir = predict(slide_folder, slide_file_name)
+    segmentationFileName = mergePatches(slide_folder, slide_file_name, df, patch_size, res_dir)
 
-    # 模拟数据
-    tsr = 0.85
+    # 计算TSR
+    logger.info("开始计算TSR：" + slide_file_name)
+    tsr, tsr_hotspot, hotspot_file_name = calculateTSR(slide_folder, slide_file_name)
     
     # 输出 JSON 格式的结果
     result = {
@@ -57,6 +58,8 @@ def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_pa
         "dictName": dict_name,
         "modelName": model_name,
         "tsr": tsr,
+        "tsr_hotspot": tsr_hotspot,
+        "hotspot_file_name": hotspot_file_name,
         "segmentationFileName": segmentationFileName
     }
     res_json_path = os.path.join(res_dir, f"{segmentationFileName}_result.json")
@@ -77,7 +80,7 @@ if __name__ == "__main__":
     model_patch_size = int(config['DEFAULT']['model_patch_size'])
     slide_patches_base_folder = config['DEFAULT']['slide_patches_base_folder']
     ROOT_PATH = config['DEFAULT']['ROOT_PATH']
-    model_name = config['DEFAULT']['model_name']
+    model_name = "resnet50-{}".format(model_patch_size)
     dict_name = config['DEFAULT']['dict_name']
 
     # 获取命令行中的参数

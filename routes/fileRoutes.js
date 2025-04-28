@@ -9,9 +9,10 @@ const { json } = require("stream/consumers");
 // 记录文件是否正在分析
 const fileStatus = new Map();
 
-async function isAnalyzed(file_name) {
+async function isAnalyzed(folderName, file_name) {
   const res_base_folder = path.join(__dirname, "../public/predictRes");
-  const subFolderPath = path.join(res_base_folder, file_name);
+  const subFolderName = folderName + "_" + file_name;
+  const subFolderPath = path.join(res_base_folder, subFolderName);
   const result = {
     isSegemented: false,
     isPredicted: false,
@@ -42,8 +43,10 @@ async function processFile(folderPath, file, broadcast, fileStatus) {
   let command = `python ${pythonScript} --slide_folder "${folderPath}" --slide_file_name "${file}"`;
 
   // 检查文件是否已分析过
-  const file_name = path.basename(file, ".svs"); // 重要! 不标const时是全局变量！
-  const isAnalyzedResult = await isAnalyzed(file_name);
+  const file_name = path.basename(file, ".svs");
+  const folderName = path.basename(folderPath);
+  const jsonFolderName = folderName + "_" + file_name;
+  const isAnalyzedResult = await isAnalyzed(folderName, file_name);
 
   // 如果已经有分析结果了，直接返回
   if (isAnalyzedResult.isPredicted) {
@@ -51,7 +54,7 @@ async function processFile(folderPath, file, broadcast, fileStatus) {
 
     // 获取 JSON 文件路径
     const res_base_folder = path.join(__dirname, "../public/predictRes");
-    const jsonFilePath = path.join(res_base_folder, file_name, isAnalyzedResult.jsonFiles[0]);
+    const jsonFilePath = path.join(res_base_folder, jsonFolderName, isAnalyzedResult.jsonFiles[0]);
 
     try {
       // 读取 JSON 文件
@@ -59,11 +62,12 @@ async function processFile(folderPath, file, broadcast, fileStatus) {
       const result = JSON.parse(resultData);
 
       // 广播分析完成事件
-      fileStatus.set(fileKey, { status: "completed", result });
+      fileStatus.set(fileKey, { status: "completed", result: result });
       broadcast("file_processed", {
         file,
         status: "completed",
         tsr: result.tsr,
+        tsr_hotspot: result.tsr_hotspot,
         segmentationFileName: result.segmentationFileName,
       });
     } catch (error) {
@@ -126,11 +130,12 @@ async function processFile(folderPath, file, broadcast, fileStatus) {
       const result = JSON.parse(resultData);
 
       // 广播分析完成事件
-      fileStatus.set(fileKey, { status: "completed", result });
+      fileStatus.set(fileKey, { status: "completed", result: result });
       broadcast("file_processed", {
         file,
         status: "completed",
         tsr: result.tsr,
+        tsr_hotspot: result.tsr_hotspot,
         segmentationFileName: result.segmentationFileName,
       });
     } catch (parseError) {
@@ -200,11 +205,11 @@ router.post("/analyze", (req, res) => {
         file,
         status: "completed",
         tsr: status.result.tsr,
+        tsr_hotspot: status.result.tsr_hotspot,
         segmentationFileName: status.result.segmentationFileName,
       });
     } else if (status && status.status === "analyzing") {
       // 文件正在处理，返回正在处理状态
-      console.log(`文件 ${file} 正在处理`);
       results.push({
         file,
         status: "analyzing",
