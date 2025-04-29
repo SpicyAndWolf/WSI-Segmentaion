@@ -1,62 +1,21 @@
-2025-04-26 21:35:28 info: 请求的文件夹路径:
-2025-04-26 21:36:45 info: 请求的文件夹路径: E:\Downloads\slides
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-26 23:00:06"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-26 23:06:33"}
-{"0":"2001549007_101728.svs","1":"1726363012.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件:","timestamp":"2025-04-26 23:06:37"}
-{"0":"2001549007_101728.svs","1":"1726363012.svs","2":"2004409012_141125.svs","3":"2004641017_223701.svs","4":"2005360012_000230.svs","5":"2100064008_112515.svs","level":"info","message":"请求的文件:","timestamp":"2025-04-26 23:06:42"}
-{"0":"2001549007_101728.svs","1":"1726363012.svs","2":"2004409012_141125.svs","3":"2005360012_000230.svs","level":"info","message":"请求的文件:","timestamp":"2025-04-26 23:06:48"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件:","timestamp":"2025-04-26 23:08:59"}
-{"0":"2005360012_000230.svs","level":"info","message":"请求的文件:","timestamp":"2025-04-26 23:09:03"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-26 23:11:15"}
-{"0":"2004409012_141125.svs","1":"2004641017_223701.svs","2":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:11:18"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-26 23:11:39"}
-{"0":"2004409012_141125.svs","1":"2004641017_223701.svs","2":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:11:41"}
-{"0":"2004409012_141125.svs","1":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:12:20"}
-{"0":"2004409012_141125.svs","1":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:12:26"}
-{"0":"2004409012_141125.svs","1":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:13:14"}
-{"0":"2004409012_141125.svs","1":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:13:20"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-26 23:13:33"}
-{"0":"2004409012_141125.svs","1":"2004641017_223701.svs","2":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:13:35"}
-{"0":"2004409012_141125.svs","1":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:14:04"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-26 23:14:25"}
-{"0":"2004641017_223701.svs","1":"2004409012_141125.svs","2":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:14:27"}
-{"0":"2004409012_141125.svs","1":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-26 23:14:35"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-27 19:37:16"}
-{"0":"2004409012_141125.svs","1":"2001549007_101728.svs","2":"1726363012.svs","level":"info","message":"请求的文件","timestamp":"2025-04-27 19:37:21"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-27 20:27:42"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-27 20:28:45"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-27 21:46:39"}
-{"level":"error","message":"提取原图片时出错: Command failed: python E:\\Code\\WSI\\BackEnd\\algorithm\\utils\\extractPng.py --slide_folder \"E:\\Downloads\\slides\" --slide_file_name \"2001549007_101728.svs\"\nusage: extractPng.py [-h] slide_file_name slide_folder\r\nextractPng.py: error: unrecognized arguments: --slide_folder --slide_file_name\r\n","timestamp":"2025-04-27 21:47:51"}
-{"level":"error","message":"提取原图片时出错: Command failed: python E:\\Code\\WSI\\BackEnd\\algorithm\\utils\\extractPng.py --slide_folder \"E:\\Downloads\\slides\" --slide_file_name \"2004409012_141125.svs\"\nusage: extractPng.py [-h] slide_file_name slide_folder\r\nextractPng.py: error: unrecognized arguments: --slide_folder --slide_file_name\r\n","timestamp":"2025-04-27 21:47:51"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-27 21:48:10"}
-{"level":"error","message":"提取原图片时出错: Command failed: python E:\\Code\\WSI\\BackEnd\\algorithm\\utils\\extractPng.py --slide_folder \"E:\\Downloads\\slides\" --slide_file_name \"1726363012.svs\"\nusage: extractPng.py [-h] slide_file_name slide_folder\r\nextractPng.py: error: unrecognized arguments: --slide_folder --slide_file_name\r\n","timestamp":"2025-04-27 21:48:12"}
-{"level":"error","message":"提取原图片时出错: Command failed: python E:\\Code\\WSI\\BackEnd\\algorithm\\utils\\extractPng.py --slide_folder \"E:\\Downloads\\slides\" --slide_file_name \"2001549007_101728.svs\"\nTraceback (most recent call last):\r\n  File \"E:\\Code\\WSI\\BackEnd\\algorithm\\utils\\extractPng.py\", line 6, in <module>\r\n    from utils.myLogger import setup_logger\r\nModuleNotFoundError: No module named 'utils'\r\n","timestamp":"2025-04-27 21:53:05"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-27 21:57:24"}
-{"0":"2004641017_223701.svs","level":"info","message":"请求的文件","timestamp":"2025-04-27 22:00:34"}
-{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-27 22:00:36"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:21:45"}
-{"0":"2001549007_101728.svs","1":"1726363012.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:21:51"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:23:06"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:23:08"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:26:31"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:26:35"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:30:22"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:30:23"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:32:31"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:32:34"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:33:33"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:33:34"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:34:29"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:34:31"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:34:42"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:36:33"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:36:35"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:41:11"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:41:13"}
-{"0":"2100064008_112515.svs","1":"2005360012_000230.svs","2":"2004641017_223701.svs","3":"1726363012.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:41:46"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 20:41:59"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","3":"2004641017_223701.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:42:00"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 20:42:20"}
-{"level":"info","message":"请求的文件夹路径: E:\\Downloads\\slides","timestamp":"2025-04-28 21:40:59"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 21:41:01"}
-{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","3":"2100064008_112515.svs","level":"info","message":"请求的文件","timestamp":"2025-04-28 21:41:34"}
+{"0":"2005360012_000230.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 15:12:53"}
+{"0":"2005360012_000230.svs","1":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 15:14:21"}
+{"level":"info","message":"请求的文件夹路径: E:/Downloads/slides","timestamp":"2025-04-29 15:48:59"}
+{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 15:49:01"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 15:49:12"}
+{"level":"error","message":"执行 Python 脚本时出错: Command failed: python E:\\Code\\WSI\\BackEnd\\algorithm\\main.py --slide_folder E:/Downloads/slides --slide_file_name 2004409012_141125.svs --isNormalized normalized --justOriginSegmented True\nTraceback (most recent call last):\r\n  File \"E:/Code/WSI/BackEnd\\algorithm\\fast-stain-normalization\\source\\__main__.py\", line 4, in <module>\r\n    import torchstain\r\nModuleNotFoundError: No module named 'torchstain'\r\nTraceback (most recent call last):\r\n  File \"E:\\Code\\WSI\\BackEnd\\algorithm\\main.py\", line 108, in <module>\r\n    seg_patch(slide_folder, slide_file_name, patches_base_folder, model_patch_size, model_name, dict_name, isSegmented, isNormalized, justOriginSegmented)\r\n  File \"E:\\Code\\WSI\\BackEnd\\algorithm\\main.py\", line 59, in seg_patch\r\n    df, patch_size, res_dir = predict(slide_folder, slide_file_name, isNormalized, used_patches_folder)\r\n  File \"E:\\Code\\WSI\\BackEnd\\algorithm\\src\\predict.py\", line 271, in predict\r\n    df['y'] = df['patch'].apply(lambda p: int(p.split('_')[0]))\r\n  File \"D:\\Develop\\AnaConda\\envs\\SURE\\lib\\site-packages\\pandas\\core\\frame.py\", line 3761, in __getitem__\r\n    indexer = self.columns.get_loc(key)\r\n  File \"D:\\Develop\\AnaConda\\envs\\SURE\\lib\\site-packages\\pandas\\core\\indexes\\range.py\", line 349, in get_loc\r\n    raise KeyError(key)\r\nKeyError: 'patch'\r\n","timestamp":"2025-04-29 15:49:35"}
+{"level":"info","message":"请求的文件夹路径: E:/Downloads/slides","timestamp":"2025-04-29 16:24:08"}
+{"0":"1726363012.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:24:16"}
+{"0":"1726363012.svs","1":"2001549007_101728.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:24:17"}
+{"0":"1726363012.svs","1":"2001549007_101728.svs","2":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:24:18"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:24:40"}
+{"level":"info","message":"请求的文件夹路径: E:/Downloads/slides","timestamp":"2025-04-29 16:26:41"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:26:55"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:27:58"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 16:28:05"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 19:53:45"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 19:55:36"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 19:59:19"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 21:07:33"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 21:07:41"}
+{"0":"2004409012_141125.svs","level":"info","message":"请求的文件","timestamp":"2025-04-29 21:08:00"}

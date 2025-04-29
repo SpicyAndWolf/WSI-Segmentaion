@@ -1,12 +1,13 @@
 import argparse
 import json
 import configparser
-from utils.segWithoutAnnotation import slide2patches
-from utils.predict import predict, mergePatches
-from utils.calculateTSR import calculateTSR
+from src.segWithoutAnnotation import slide2patches
+from src.predict import predict, mergePatches
+from src.calculateTSR import calculateTSR
 from datetime import datetime
 import os
 from utils.myLogger import setup_logger
+from src.normalizePatch import normalizePatch
 
 # 设置日志记录器
 logger = setup_logger()
@@ -17,38 +18,50 @@ def parse_args():
     parser.add_argument("--slide_folder", type=str, help="Path to the folder containing slide images")
     parser.add_argument("--slide_file_name", type=str, help="Name of the slide file to process")
     parser.add_argument("--isSegmented", type=bool, default=False, help="Whether the slide is already segmented")
+    parser.add_argument("--isNormalized", type=str, default="notNormalized",help="Whether the slide is needed to be normalized")
+    parser.add_argument("--justOriginSegmented", type=bool, default=False, help="Whether the slide is just origin segmented")
 
     # 解析参数
     args = parser.parse_args()
     return args
 
-def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_patch_size, model_name, dict_name, isSegmented):
+def seg_patch(slide_folder, slide_file_name, patches_base_folder, model_patch_size, model_name, dict_name, isSegmented, isNormalized, justOriginSegmented):
     # 打印所有参数
     all_config={
         "slide_fold": slide_folder,
         "slide_files_name": slide_file_name,
-        "res_fold": slide_patches_base_folder,
-        "model_patch_size": model_patch_size
+        "model_patch_size": model_patch_size,
+        "dict_name":dict_name,
+        "isNormalized":isNormalized
     }
     logger.info(f"请求处理patch: {all_config}")
 
     # 创建存储patches的文件夹
-    patches_folder = os.path.join(slide_patches_base_folder, slide_file_name, "origin-{}".format(model_patch_size))
+    slide_folder_slide_name = os.path.basename(slide_folder)+"_"+slide_file_name # 确保目录的唯一性
+    patches_folder = os.path.join(patches_base_folder, slide_folder_slide_name, "origin-{}".format(model_patch_size)) # 原始patches
     if(not os.path.exists(patches_folder)):
         os.makedirs(patches_folder)
 
     # 开始切分
-    if not isSegmented:
+    if (not isSegmented) and (not justOriginSegmented):
         logger.info("开始分割 patch：" + slide_file_name)
         slide2patches(slide_folder, slide_file_name, patches_folder, model_patch_size)
+    
 
+    # 标准化
+    used_patches_folder = patches_folder # 最终用于预测的patches文件夹
+    if (isNormalized == "normalized") and (not isSegmented):
+        logger.info("开始标准化 patch：" + slide_file_name)
+        used_patches_folder = os.path.join(patches_base_folder, slide_folder_slide_name, "normalized-{}".format(model_patch_size))
+        normalizePatch(patches_folder, used_patches_folder, slide_file_name) # 标准化patches
+    
     # 预测
-    df, patch_size, res_dir = predict(slide_folder, slide_file_name)
-    segmentationFileName = mergePatches(slide_folder, slide_file_name, df, patch_size, res_dir)
+    df, patch_size, res_dir = predict(slide_folder, slide_file_name, isNormalized, used_patches_folder)
+    segmentationFileName = mergePatches(slide_folder, slide_file_name, df, patch_size, res_dir, isNormalized)
 
     # 计算TSR
     logger.info("开始计算TSR：" + slide_file_name)
-    tsr, tsr_hotspot, hotspot_file_name = calculateTSR(slide_folder, slide_file_name)
+    tsr, tsr_hotspot, hotspot_file_name = calculateTSR(slide_folder, slide_file_name, res_dir, isNormalized)
     
     # 输出 JSON 格式的结果
     result = {
@@ -60,7 +73,8 @@ def seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_pa
         "tsr": tsr,
         "tsr_hotspot": tsr_hotspot,
         "hotspot_file_name": hotspot_file_name,
-        "segmentationFileName": segmentationFileName
+        "segmentationFileName": segmentationFileName,
+        "isNormalized": isNormalized,
     }
     res_json_path = os.path.join(res_dir, f"{segmentationFileName}_result.json")
     with open(res_json_path, 'w') as f:
@@ -78,7 +92,7 @@ if __name__ == "__main__":
 
     # 获取配置文件内参数
     model_patch_size = int(config['DEFAULT']['model_patch_size'])
-    slide_patches_base_folder = config['DEFAULT']['slide_patches_base_folder']
+    patches_base_folder = config['DEFAULT']['patches_base_folder']
     ROOT_PATH = config['DEFAULT']['ROOT_PATH']
     model_name = "resnet50-{}".format(model_patch_size)
     dict_name = config['DEFAULT']['dict_name']
@@ -87,6 +101,8 @@ if __name__ == "__main__":
     slide_folder = args.slide_folder
     slide_file_name = os.path.splitext(args.slide_file_name)[0]
     isSegmented = args.isSegmented
+    isNormalized = args.isNormalized
+    justOriginSegmented = args.justOriginSegmented
 
     # 切分patch
-    seg_patch(slide_folder, slide_file_name, slide_patches_base_folder, model_patch_size, model_name, dict_name, isSegmented)
+    seg_patch(slide_folder, slide_file_name, patches_base_folder, model_patch_size, model_name, dict_name, isSegmented, isNormalized, justOriginSegmented)
