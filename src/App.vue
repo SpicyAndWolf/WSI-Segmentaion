@@ -11,14 +11,15 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // ToolBar基本参数
 const isSidebarVisible = ref(true); // 控制侧边栏显示/隐藏
-const isColorAdaptive = ref(false); // 颜色自适应开关
-const folderPath = ref(""); // 文件夹路径
+const isColorAdaptive = ref("notNormalized"); // 颜色自适应开关
+const folderPath = ref("E:/Downloads/slides"); // 文件夹路径
 
 // 文件列表相关
 const fileList = ref([]); // 存储文件列表
 const selectedFiles = ref([]); // 存储选中的文件名
 const selectAll = ref(false); // 全选状态
 const currentFile = ref(null); // 当前查看的文件
+const currentFileOriginUrl = ref(""); // 当前查看的文件原图URL
 
 // 分析状态和结果
 const analysisStatus = ref({}); // 存储每个文件的分析状态
@@ -45,12 +46,15 @@ onMounted(() => {
       // 分析成功
       ElMessage.success(`文件 ${data.file} 分析完成`);
       const fileName = data.file.slice(0, data.file.lastIndexOf("."));
-      const segmentationUrl = `${API_URL}/predictRes/${fileName}/${data.segmentationFileName}`;
+      const folderName = data.folderPath.split(/[\\/]/).pop();
+      const isNormalized = data.isNormalized;
+      const segmentationUrl = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}/${data.segmentationFileName}`;
 
       // 更新分析状态
       analysisStatus.value[data.file] = {
         status: "completed",
         tsr: data.tsr,
+        tsr_hotspot: data.tsr_hotspot,
         segmentationUrl: segmentationUrl,
       };
     }
@@ -118,9 +122,36 @@ const toggleFileSelection = (file) => {
   selectAll.value = selectedFiles.value.length === fileList.value.length;
 };
 
+// 提取 PNG 图像
+const extractPng = async (file) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/originImage`, {
+      slide_file_name: file,
+      slide_folder: folderPath.value,
+    });
+
+    // 获取后端返回的文件名
+    const originImageName = response.data.img_file_name;
+    if (response.data.success) {
+      currentFileOriginUrl.value = `${API_URL}/originImage/${originImageName}`;
+    } else {
+      ElMessage.error(response.data.message || "PNG 提取失败");
+    }
+  } catch (error) {
+    console.error("提取 PNG 失败:", error);
+    ElMessage.error("服务器错误");
+  }
+};
+
 // 查看文件分析结果
-const viewFileAnalysis = (file) => {
+const viewFile = async (file) => {
+  currentFileOriginUrl.value = "";
+  currentFileStatus.segmentationUrl = "";
+  currentFileStatus.tsr = "";
+  currentFileStatus.tsr_hotspot = "";
+  currentFileStatus.status = "none";
   currentFile.value = file;
+  await extractPng(file);
 };
 
 // 开始分析
@@ -130,17 +161,11 @@ const startAnalysis = async () => {
     return;
   }
 
-  // 过滤掉已知正在分析的文件
-  const filesToAnalyze = selectedFiles.value.filter((file) => analysisStatus.value[file]?.status !== "analyzing");
-  if (filesToAnalyze.length === 0) {
-    ElMessage.warning("所有选中的文件正在分析中");
-    return;
-  }
-
   try {
     const response = await axios.post(`${API_URL}/api/analyze`, {
-      files: filesToAnalyze,
+      files: selectedFiles.value,
       folderPath: folderPath.value,
+      isNormalized: isColorAdaptive.value,
     });
     if (response.data.success) {
       ElMessage.success("分析已开始");
@@ -151,10 +176,13 @@ const startAnalysis = async () => {
         if (result.status === "completed") {
           // 对于分析已完成的
           const fileName = result.file.slice(0, result.file.lastIndexOf("."));
-          const segmentationUrl = `${API_URL}/predictRes/${fileName}/${result.segmentationFileName}`;
+          const folderName = result.folderPath.split(/[\\/]/).pop();
+          const isNormalized = result.isNormalized;
+          const segmentationUrl = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}/${result.segmentationFileName}`;
           analysisStatus.value[result.file] = {
             status: "completed",
             tsr: result.tsr,
+            tsr_hotspot: result.tsr_hotspot,
             segmentationUrl: segmentationUrl,
           };
         } else if (result.status === "analyzing") {
@@ -184,6 +212,7 @@ const currentFileStatus = computed(() => {
       return {
         status: "completed",
         tsr: status.tsr,
+        tsr_hotspot: status.tsr_hotspot,
         segmentationUrl: status.segmentationUrl,
       };
     } else if (status.status === "error") {
@@ -211,7 +240,13 @@ const currentFileStatus = computed(() => {
       <!-- 颜色自适应开关 -->
       <ElTooltip content="自适应颜色，开启后将增加约10分钟的分析时间" placement="bottom">
         <div class="switch-wrapper">
-          <ElSwitch v-model="isColorAdaptive" active-text="颜色自适应" inactive-text="默认" />
+          <ElSwitch
+            v-model="isColorAdaptive"
+            active-text="颜色自适应"
+            inactive-text="默认"
+            active-value="normalized"
+            inactive-value="notNormalized"
+          />
         </div>
       </ElTooltip>
 
@@ -246,7 +281,7 @@ const currentFileStatus = computed(() => {
               error: analysisStatus[file]?.status === 'error',
             }"
             @click="toggleFileSelection(file)"
-            @dblclick="viewFileAnalysis(file)"
+            @dblclick="viewFile(file)"
           >
             {{ file }}
           </div>
@@ -258,7 +293,7 @@ const currentFileStatus = computed(() => {
           <!-- 原图 -->
           <div class="original-image">
             <h3>原始图像</h3>
-            <img :src="currentFile ? 'https://i.vgy.me/QgKIBP.png' : ''" class="image" />
+            <img :src="currentFile ? `${currentFileOriginUrl}` : ''" class="image" />
           </div>
           <!-- 分析结果 -->
           <div class="analysis-result">
@@ -282,6 +317,7 @@ const currentFileStatus = computed(() => {
               </div>
               <div class="tsr-result">
                 <p>TSR: {{ currentFileStatus.tsr }}</p>
+                <p>热点区域TSR: {{ currentFileStatus.tsr_hotspot }}</p>
               </div>
             </div>
           </div>
@@ -491,6 +527,15 @@ const currentFileStatus = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.tsr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 20px;
 }
 
 .tsr-result p {
