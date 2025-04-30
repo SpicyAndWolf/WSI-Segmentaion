@@ -27,45 +27,53 @@ const analysisStatus = ref({}); // 存储每个文件的分析状态
 // WebSocket 连接
 let socket = null;
 
+// 映射状态
+const mapStatus = (fileInfo) => {
+  if (fileInfo.status === "completed") {
+    const fileName = fileInfo.file.slice(0, fileInfo.file.lastIndexOf("."));
+    const folderName = fileInfo.folderPath.split(/[\\/]/).pop();
+    const isNormalized = fileInfo.isNormalized;
+    const segmentationFileName = fileInfo.result.segmentationFileName;
+    const tsr = fileInfo.result.tsr;
+    const tsr_hotspot = fileInfo.result.tsr_hotspot;
+    const segmentationUrl = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}/${segmentationFileName}`;
+
+    return {
+      status: "completed",
+      tsr: tsr,
+      tsr_hotspot: tsr_hotspot,
+      segmentationUrl: segmentationUrl,
+    };
+  } else if (fileInfo.status === "analyzing") {
+    return {
+      status: "analyzing",
+      message: "正在分析...",
+    };
+  } else if (fileInfo.status === "queued") {
+    return {
+      status: "queued",
+      message: "等待处理中...",
+    };
+  } else if (fileInfo.status === "error") {
+    return {
+      status: "error",
+      message: fileInfo.result.message || "分析失败",
+    };
+  }
+};
+
 onMounted(() => {
   socket = io(`${API_URL}`);
   socket.on("connect", () => {
     console.log("Socket.IO 连接已建立");
   });
-  socket.on("file_processed", (data) => {
-    if (data.status === "error") {
-      // 分析失败
-      ElMessage.error(`文件 ${data.file} 分析失败: ${data.message}`);
+  socket.on("file_processed", (fileInfo) => {
+    // 给状态变化的文件分配状态
+    analysisStatus.value[fileInfo.file] = mapStatus(fileInfo);
 
-      // 更新分析状态
-      analysisStatus.value[data.file] = {
-        status: data.status,
-        message: data.message,
-      };
-    } else if (data.status === "completed") {
-      // 分析成功
-      ElMessage.success(`文件 ${data.file} 分析完成`);
-      const fileName = data.file.slice(0, data.file.lastIndexOf("."));
-      const folderName = data.folderPath.split(/[\\/]/).pop();
-      const isNormalized = data.isNormalized;
-      const segmentationUrl = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}/${data.segmentationFileName}`;
-
-      // 更新分析状态
-      analysisStatus.value[data.file] = {
-        status: "completed",
-        tsr: data.tsr,
-        tsr_hotspot: data.tsr_hotspot,
-        segmentationUrl: segmentationUrl,
-      };
-    } else if (data.status === "analyzing") {
-      ElMessage.info(`文件 ${data.file} 开始分析...`);
-      analysisStatus.value[data.file] = {
-        status: data.status,
-        message: "正在分析...",
-      };
-    }
-    if (currentFile.value === data.file) {
-      currentFile.value = data.file;
+    // 刷新当前页内容
+    if (currentFile.value === fileInfo.file) {
+      currentFile.value = fileInfo.file;
     }
   });
   socket.on("connect_error", (error) => {
@@ -85,6 +93,11 @@ const toggleSidebar = () => {
   isSidebarVisible.value = !isSidebarVisible.value;
 };
 
+// 规范化路径函数
+const normalizePath = (path) => {
+  return path.replace(/\\/g, "/");
+};
+
 // 更新文件列表
 const updateFileList = async () => {
   if (!folderPath.value) {
@@ -93,15 +106,37 @@ const updateFileList = async () => {
   }
 
   try {
-    const response = await axios.post(`${API_URL}/api/getFileList`, {
+    const fileListResponse = await axios.post(`${API_URL}/api/getFileList`, {
       folderPath: folderPath.value,
     });
 
-    if (response.data.success) {
-      fileList.value = response.data.files;
+    if (fileListResponse.data.success) {
+      fileList.value = fileListResponse.data.files;
       ElMessage.success("文件列表更新成功");
+
+      // 获取所有文件的分析状态
+      const statusResponse = await axios.get(`${API_URL}/api/getAnalysisStatus`);
+      if (statusResponse.data.success) {
+        // 清空当前的 analysisStatus
+        analysisStatus.value = {};
+
+        // 遍历后端返回的状态，更新 analysisStatus
+        statusResponse.data.fileInfos.forEach((fileInfo) => {
+          // 规范化路径，防止正斜杠和反斜杠不匹配
+          const normalizedStatusFolderPath = normalizePath(fileInfo.folderPath);
+          const normalizedFolderPath = normalizePath(folderPath.value);
+
+          // 只处理与当前文件夹相关的文件
+          if (normalizedStatusFolderPath === normalizedFolderPath && fileInfo.isNormalized === isColorAdaptive.value) {
+            analysisStatus.value[fileInfo.file] = mapStatus(fileInfo);
+          }
+        });
+        ElMessage.success("文件分析状态同步成功");
+      } else {
+        ElMessage.error(fileListResponse.data.message || "同步文件状态失败");
+      }
     } else {
-      ElMessage.error(response.data.message || "获取文件列表失败");
+      ElMessage.error(fileListResponse.data.message || "获取文件列表失败");
     }
   } catch (error) {
     console.error("获取文件列表失败:", error);
@@ -175,40 +210,11 @@ const startAnalysis = async () => {
     });
     if (response.data.success) {
       ElMessage.success("分析已开始");
-      const results = response.data.results;
+      const fileInfos = response.data.fileInfos;
 
       // 更新每个选中文件的分析状态
-      results.forEach((result) => {
-        if (result.status === "completed") {
-          // 对于分析已完成的
-          const fileName = result.file.slice(0, result.file.lastIndexOf("."));
-          const folderName = result.folderPath.split(/[\\/]/).pop();
-          const isNormalized = result.isNormalized;
-          const segmentationUrl = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}/${result.segmentationFileName}`;
-          analysisStatus.value[result.file] = {
-            status: "completed",
-            tsr: result.tsr,
-            tsr_hotspot: result.tsr_hotspot,
-            segmentationUrl: segmentationUrl,
-          };
-        }
-        // 对于正在分析、待分析的
-        else if (result.status === "analyzing") {
-          analysisStatus.value[result.file] = {
-            status: "analyzing",
-            message: "正在分析...",
-          };
-        } else if (result.status === "queued") {
-          analysisStatus.value[result.file] = {
-            status: "queued",
-            message: "等待处理中...",
-          };
-        } else if (result.status === "error") {
-          analysisStatus.value[result.file] = {
-            status: "error",
-            message: result.message,
-          };
-        }
+      fileInfos.forEach((fileInfo) => {
+        analysisStatus.value[fileInfo.file] = mapStatus(fileInfo);
       });
     } else {
       ElMessage.error(response.data.message || "分析失败");
@@ -280,6 +286,7 @@ const currentFileStatus = computed(() => {
             inactive-text="默认"
             active-value="normalized"
             inactive-value="notNormalized"
+            @click="updateFileList"
           />
         </div>
       </ElTooltip>
