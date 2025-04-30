@@ -2,32 +2,36 @@ import cv2
 import numpy as np
 import os
 import openslide
-import matplotlib.pyplot as plt
 from datetime import datetime
 import pandas as pd
+import configparser
+from utils.myLogger import setup_logger
 
-# 定义 slide 名称列表
-slide_names = [
-    "2238241002_090843"
-]
+# 设置日志记录器
+logger = setup_logger()
+
+# 读取配置文件
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 # 基本变量
-patch_size = 256
-dict_name = "epoch30+21-acc9819-finetune"
-model_name = "resnet50-{}".format(patch_size)
-slide_fold = "/home/zyf/Database/WSI-notation/"
+model_patch_size = config['DEFAULT']['model_patch_size']
+model_name = "resnet50-{}".format(model_patch_size)
 
-def process_slide_edge(slide_name):
+def edgeDetect(slide_folder, slide_name, res_dir, isNormalized):
     """处理单个 slide，找到肿瘤区域边缘并可视化"""
     # 记录开始时间
     start = datetime.now()
     print(f"开始处理 {slide_name} 的肿瘤边缘检测...")
 
-    # 设置路径
-    res_path = f"/home/zyf/Projects/WSI/New/predictRes/{slide_name}"
+    # 确定dict_name
+    config_type = 'DEFAULT'
+    if isNormalized == "normalized":
+        config_type = 'NORMALIZED'
+    dict_name = config[config_type]['dict_name']
     
     # 打开 svs 文件获取缩略图
-    slide_path = os.path.join(slide_fold, f"{slide_name}.svs")
+    slide_path = os.path.join(slide_folder, f"{slide_name}.svs")
     slide = openslide.OpenSlide(slide_path)
     
     # 选择最低分辨率级别
@@ -38,12 +42,12 @@ def process_slide_edge(slide_name):
     thumbnail = np.array(slide.read_region((0, 0), level, (width, height)))[:, :, :3]
     
     # 读取预测结果 CSV 文件
-    csv_path = os.path.join(res_path, f'predictions-{model_name}-{dict_name}.csv')
+    csv_path = os.path.join(res_dir, f'predictions-{model_name}-{dict_name}.csv')
     if not os.path.exists(csv_path):
         print(f"预测 CSV 文件不存在: {csv_path}")
         return
     
-    df = pd.read_csv(csv_path, header=None, names=['patch', 'class', 'true_label', 'prob_0', 'prob_1', 'prob_2'])
+    df = pd.read_csv(csv_path)
     
     # 提取 patch 坐标
     df['y'] = df['patch'].str.split('_').str[0].astype(int)
@@ -60,8 +64,8 @@ def process_slide_edge(slide_name):
     scale_y = height / height_high
     
     # 计算缩略图上 patch 的大小
-    patch_width_low = int(patch_size * scale_x)
-    patch_height_low = int(patch_size * scale_y)
+    patch_width_low = int(model_patch_size * scale_x)
+    patch_height_low = int(model_patch_size * scale_y)
     
     # 创建与缩略图大小相同的空白掩码
     tumor_mask = np.zeros((height, width), dtype=np.uint8)
@@ -86,7 +90,6 @@ def process_slide_edge(slide_name):
     
     # 过滤小面积的轮廓
     min_area = tumor_mask_area * 0.0005
-    print("min area: ",min_area)
     significant_contours = [cnt for cnt in contours if cv2.contourArea(cnt) > min_area]
     
     # 创建结果可视化图像
@@ -104,13 +107,16 @@ def process_slide_edge(slide_name):
     result_image = cv2.addWeighted(overlay, alpha, result_image, 1 - alpha, 0)
     
     # 保存可视化结果
-    output_path = os.path.join(res_path, f'tumor_edge-{model_name}-{dict_name}.png')
+    img_name = f'tumor_edge-{model_name}-{dict_name}.png'
+    output_path = os.path.join(res_dir, img_name)
     cv2.imwrite(output_path, cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR))
     
-    print(f"处理完成 {slide_name}，耗时: {datetime.now() - start}")
-    print(f"共找到 {len(significant_contours)} 个肿瘤区域。")
-    print(f"结果已保存至: {output_path}")
+    logger.info(f"处理完成 {slide_name}，耗时: {datetime.now() - start}")
+    logger.info(f"共找到 {len(significant_contours)} 个肿瘤区域。")
+    logger.info(f"结果已保存至: {output_path}")
+    return img_name
 
 if __name__ == "__main__":
+    slide_names = []
     for slide_name in slide_names:
-        process_slide_edge(slide_name)
+        edgeDetect(slide_name)

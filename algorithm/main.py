@@ -4,6 +4,7 @@ import configparser
 from src.segWithoutAnnotation import slide2patches
 from src.predict import predict, mergePatches
 from src.calculateTSR import calculateTSR
+from src.edgeDetect import edgeDetect
 from datetime import datetime
 import os
 from utils.myLogger import setup_logger
@@ -62,6 +63,9 @@ def seg_patch(slide_folder, slide_file_name, patches_base_folder, model_patch_si
     # 计算TSR
     logger.info("开始计算TSR：" + slide_file_name)
     tsr, tsr_hotspot, hotspot_file_name = calculateTSR(slide_folder, slide_file_name, res_dir, isNormalized)
+
+    # 计算肿瘤前缘
+    tumorEdge_file_name = edgeDetect(slide_folder,slide_file_name,res_dir,isNormalized)
     
     # 输出 JSON 格式的结果
     result = {
@@ -75,6 +79,7 @@ def seg_patch(slide_folder, slide_file_name, patches_base_folder, model_patch_si
         "hotspot_file_name": hotspot_file_name,
         "segmentationFileName": segmentationFileName,
         "isNormalized": isNormalized,
+        "tumorEdge_file_name":tumorEdge_file_name
     }
     res_json_path = os.path.join(res_dir, f"{segmentationFileName}_result.json")
     with open(res_json_path, 'w') as f:
