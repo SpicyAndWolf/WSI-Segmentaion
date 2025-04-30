@@ -3,6 +3,8 @@ from PIL import Image
 import argparse
 import os
 import configparser
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.myLogger import setup_logger
 
 # 设置日志记录器

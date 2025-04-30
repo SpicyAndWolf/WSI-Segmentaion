@@ -1,30 +1,45 @@
-2025-04-29 16:26:58,706 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2004409012_141125', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
-2025-04-29 16:26:58,707 - python_logger - INFO - 开始标准化 patch：2004409012_141125
-2025-04-29 16:51:37,412 - python_logger - INFO - 颜色标准化2004409012_141125，花费时间: 0:24:38.704145
-2025-04-29 16:51:39,291 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\normalized-256\Other does not exist. Skipping.
-2025-04-29 16:51:39,291 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\normalized-256\Stroma does not exist. Skipping.
-2025-04-29 16:51:39,291 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\normalized-256\Tumor does not exist. Skipping.
-2025-04-29 16:51:39,757 - python_logger - INFO - start prediction for 2004409012_141125...
-2025-04-29 16:57:32,495 - python_logger - INFO - predict for 2004409012_141125 cost time: 0:05:52.738536
-2025-04-29 16:57:32,507 - python_logger - INFO - start merging 2004409012_141125...
-2025-04-29 16:57:40,222 - python_logger - INFO - merge for 2004409012_141125 cost time: 0:00:07.714237
-2025-04-29 16:57:40,250 - python_logger - INFO - 开始计算TSR：2004409012_141125
-2025-04-29 16:57:40,250 - python_logger - ERROR - Error: Prediction file E:/Code/WSI/BackEnd\public\predictRes\slides_2004409012_141125_normalized\predictions-resnet50-256-default.csv does not exist.
-2025-04-29 16:57:40,332 - python_logger - ERROR - Error: Prediction file E:/Code/WSI/BackEnd\public\predictRes\slides_2004409012_141125_normalized\predictions-resnet50-256-default.csv does not exist.
-2025-04-29 19:59:34,226 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2004409012_141125', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
-2025-04-29 19:59:35,520 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Other does not exist. Skipping.
-2025-04-29 19:59:35,520 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Stroma does not exist. Skipping.
-2025-04-29 19:59:35,520 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Tumor does not exist. Skipping.
-2025-04-29 19:59:35,647 - python_logger - INFO - start prediction for 2004409012_141125...
-2025-04-29 20:07:33,886 - python_logger - INFO - predict for 2004409012_141125 cost time: 0:07:58.238474
-2025-04-29 20:07:33,894 - python_logger - INFO - start merging 2004409012_141125...
-2025-04-29 20:07:40,427 - python_logger - INFO - merge for 2004409012_141125 cost time: 0:00:06.532495
-2025-04-29 20:07:40,451 - python_logger - INFO - 开始计算TSR：2004409012_141125
-2025-04-29 20:07:40,524 - python_logger - INFO - Slide: 2004409012_141125
-2025-04-29 20:07:40,524 - python_logger - INFO - Stroma patches: 7156
-2025-04-29 20:07:40,524 - python_logger - INFO - Tumor patches: 7084
-2025-04-29 20:07:40,524 - python_logger - INFO - TSR: 50.25%
-2025-04-29 20:07:45,050 - python_logger - INFO - Slide: 2004409012_141125
-2025-04-29 20:07:45,051 - python_logger - INFO - Hotspot center (grid coords): (145, 95)
-2025-04-29 20:07:45,051 - python_logger - INFO - Hotspot TSR: 43.00%
-2025-04-29 20:07:45,399 - python_logger - INFO - 完成处理patch: 2004409012_141125
+2025-04-30 11:44:47,066 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2004641017_223701', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 11:44:47,093 - python_logger - INFO - 开始分割 patch：2004641017_223701
+2025-04-30 11:45:00,324 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2100064008_112515', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 11:45:00,324 - python_logger - INFO - 开始分割 patch：2100064008_112515
+2025-04-30 11:49:38,799 - python_logger - INFO - a slide cost Time: 0:04:38.475403
+2025-04-30 11:49:45,575 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2100064008_112515\origin-256\Other does not exist. Skipping.
+2025-04-30 11:49:45,575 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2100064008_112515\origin-256\Stroma does not exist. Skipping.
+2025-04-30 11:49:45,575 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2100064008_112515\origin-256\Tumor does not exist. Skipping.
+2025-04-30 11:49:45,668 - python_logger - INFO - start prediction for 2100064008_112515...
+2025-04-30 11:56:16,239 - python_logger - INFO - predict for 2100064008_112515 cost time: 0:06:30.570435
+2025-04-30 11:56:16,245 - python_logger - INFO - start merging 2100064008_112515...
+2025-04-30 11:56:17,897 - python_logger - INFO - a slide cost Time: 0:11:30.804251
+2025-04-30 11:56:19,626 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004641017_223701\origin-256\Other does not exist. Skipping.
+2025-04-30 11:56:19,627 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004641017_223701\origin-256\Stroma does not exist. Skipping.
+2025-04-30 11:56:19,627 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004641017_223701\origin-256\Tumor does not exist. Skipping.
+2025-04-30 11:56:20,327 - python_logger - INFO - start prediction for 2004641017_223701...
+2025-04-30 11:56:29,070 - python_logger - INFO - merge for 2100064008_112515 cost time: 0:00:12.825351
+2025-04-30 11:56:29,124 - python_logger - INFO - 开始计算TSR：2100064008_112515
+2025-04-30 11:56:29,204 - python_logger - INFO - Slide: 2100064008_112515
+2025-04-30 11:56:29,204 - python_logger - INFO - Stroma patches: 29
+2025-04-30 11:56:29,204 - python_logger - INFO - Tumor patches: 535
+2025-04-30 11:56:29,204 - python_logger - INFO - TSR: 5.14%
+2025-04-30 11:56:30,168 - python_logger - WARNING - No suitable hotspot found for 2100064008_112515.
+2025-04-30 11:56:30,198 - python_logger - INFO - 完成处理patch: 2100064008_112515
+2025-04-30 11:56:40,807 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2005360012_000230', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 11:56:40,807 - python_logger - INFO - 开始分割 patch：2005360012_000230
+2025-04-30 12:08:43,554 - python_logger - INFO - predict for 2004641017_223701 cost time: 0:12:23.226210
+2025-04-30 12:08:43,565 - python_logger - INFO - start merging 2004641017_223701...
+2025-04-30 12:08:56,712 - python_logger - INFO - merge for 2004641017_223701 cost time: 0:00:13.146987
+2025-04-30 12:08:56,744 - python_logger - INFO - 开始计算TSR：2004641017_223701
+2025-04-30 12:08:56,905 - python_logger - INFO - Slide: 2004641017_223701
+2025-04-30 12:08:56,905 - python_logger - INFO - Stroma patches: 25786
+2025-04-30 12:08:56,905 - python_logger - INFO - Tumor patches: 5646
+2025-04-30 12:08:56,905 - python_logger - INFO - TSR: 82.04%
+2025-04-30 12:08:59,667 - python_logger - INFO - Slide: 2004641017_223701
+2025-04-30 12:08:59,668 - python_logger - INFO - Hotspot center (grid coords): (60, 140)
+2025-04-30 12:08:59,668 - python_logger - INFO - Hotspot TSR: 68.97%
+2025-04-30 12:09:01,007 - python_logger - INFO - 完成处理patch: 2004641017_223701
+2025-04-30 12:09:35,601 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2105274011_221716', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 12:09:35,602 - python_logger - INFO - 开始分割 patch：2105274011_221716
+2025-04-30 12:11:11,537 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '1726363012', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
+2025-04-30 12:11:11,537 - python_logger - INFO - 开始标准化 patch：1726363012
+2025-04-30 12:11:18,283 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2001549007_101728', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
+2025-04-30 12:11:18,283 - python_logger - INFO - 开始标准化 patch：2001549007_101728
+2025-04-30 13:24:34,355 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2105274011_221716.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2105274011_221716.png

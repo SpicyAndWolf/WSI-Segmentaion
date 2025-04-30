@@ -7,7 +7,7 @@ const { exec } = require("child_process");
 
 // 图片所在的目录
 const originImagePath = path.join(__dirname, "../public", "originImage");
-const pythonScript = path.join(__dirname, "../algorithm/utils/extractPng.py");
+const pythonScript = path.join(__dirname, "../algorithm/src/extractPng.py");
 
 // 处理 predictRes 动态路由
 router.post("/originImage", async (req, res) => {
