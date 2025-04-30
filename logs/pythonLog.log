@@ -43,3 +43,22 @@
 2025-04-30 12:11:18,283 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2001549007_101728', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
 2025-04-30 12:11:18,283 - python_logger - INFO - 开始标准化 patch：2001549007_101728
 2025-04-30 13:24:34,355 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2105274011_221716.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2105274011_221716.png
+2025-04-30 14:49:43,271 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2005360012_000230', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 14:49:43,271 - python_logger - INFO - 开始分割 patch：2005360012_000230
+2025-04-30 14:49:49,392 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2105274011_221716', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 14:49:49,392 - python_logger - INFO - 开始分割 patch：2105274011_221716
+2025-04-30 16:24:44,446 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\1726363012.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_1726363012.png
+2025-04-30 16:24:49,613 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2001549007_101728.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2001549007_101728.png
+2025-04-30 16:24:52,040 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2004409012_141125.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2004409012_141125.png
+2025-04-30 17:47:28,096 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2004641017_223701.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2004641017_223701.png
+2025-04-30 17:47:49,852 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '1726363012', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
+2025-04-30 17:47:49,853 - python_logger - INFO - 开始标准化 patch：1726363012
+2025-04-30 17:47:53,544 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2001549007_101728', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
+2025-04-30 17:47:53,544 - python_logger - INFO - 开始标准化 patch：2001549007_101728
+2025-04-30 17:52:54,439 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2005360012_000230', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 17:52:54,439 - python_logger - INFO - 开始分割 patch：2005360012_000230
+2025-04-30 17:53:12,708 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2105274011_221716.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2105274011_221716.png
+2025-04-30 17:53:15,877 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2005360012_000230.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2005360012_000230.png
+2025-04-30 17:53:16,854 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2100064008_112515.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2100064008_112515.png
+2025-04-30 17:53:50,739 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2105274011_221716', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-04-30 17:53:50,739 - python_logger - INFO - 开始分割 patch：2105274011_221716

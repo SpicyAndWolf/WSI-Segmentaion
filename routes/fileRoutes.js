@@ -6,13 +6,61 @@ const logger = require("../logger");
 const { exec } = require("child_process");
 const { json } = require("stream/consumers");
 
-// 记录文件是否正在分析
-const fileStatus = new Map();
+// 状态文件夹路径
+const statusDir = path.join(__dirname, "../status");
 
 // 任务队列，存储待处理的文件，控制并发数量
 const taskQueue = [];
 const maxConcurrent = 2;
 let currentProcessing = 0;
+
+// 记录文件分析状态
+const fileStatus = new Map();
+
+// 确保状态文件夹存在
+async function ensureStatusDir() {
+  try {
+    await fs.access(statusDir);
+  } catch (error) {
+    await fs.mkdir(statusDir);
+  }
+}
+
+// 生成状态文件路径
+function getStatusFilePath(fileKey) {
+  const safeKey = Buffer.from(fileKey).toString("base64"); // 使用 Base64 编码避免特殊字符
+  return path.join(statusDir, `${safeKey}.json`);
+}
+
+// 加载所有状态文件到 Map
+async function loadFileStatus(fileStatus) {
+  await ensureStatusDir();
+  const files = await fs.readdir(statusDir);
+  for (const file of files) {
+    if (file.endsWith(".json")) {
+      const filePath = path.join(statusDir, file);
+      try {
+        const data = await fs.readFile(filePath, "utf-8");
+        const statusData = JSON.parse(data);
+        const fileKey = Buffer.from(file.replace(".json", ""), "base64").toString();
+        fileStatus.set(fileKey, statusData);
+      } catch (error) {
+        logger.error(`加载状态文件 ${file} 失败: ${error.message}`);
+      }
+    }
+  }
+}
+
+// 保存状态到文件
+async function saveFileStatus(fileKey, statusData) {
+  await ensureStatusDir();
+  const filePath = getStatusFilePath(fileKey);
+  try {
+    await fs.writeFile(filePath, JSON.stringify(statusData, null, 2));
+  } catch (error) {
+    logger.error(`保存状态文件 ${filePath} 失败: ${error.message}`);
+  }
+}
 
 // 从任务队列中取出任务并处理，同时控制并发数量
 async function processNext(broadcast, fileStatus) {
@@ -34,6 +82,7 @@ async function processNext(broadcast, fileStatus) {
     file,
     isNormalized,
     status: "analyzing",
+    result: null,
   });
 
   try {
@@ -116,26 +165,27 @@ async function processFile(folderPath, file, broadcast, fileStatus, isNormalized
 
               // 广播分析完成事件
               fileStatus.set(fileKey, { status: "completed", result: result });
+              saveFileStatus(fileKey, { status: "completed", result: result }); // 保存状态到文件
               broadcast("file_processed", {
                 folderPath: folderPath,
                 file: file,
                 isNormalized: isNormalized,
                 status: "completed",
-                tsr: result.tsr,
-                tsr_hotspot: result.tsr_hotspot,
-                segmentationFileName: result.segmentationFileName,
+                result: result,
               });
               resolve(); // 解析 Promise
             })
             .catch((error) => {
-              logger.error(`读取文件 ${jsonFilePath} 失败: ${error.message}`);
-              fileStatus.set(fileKey, { status: "error", result: null });
+              const errorMessage = `读取文件 ${jsonFilePath} 失败: ${error.message}`;
+              logger.error(errorMessage);
+              fileStatus.set(fileKey, { status: "error", result: { message: errorMessage } });
+              saveFileStatus(fileKey, { status: "error", result: { message: errorMessage } });
               broadcast("file_processed", {
                 folderPath: folderPath,
                 file: file,
                 isNormalized: isNormalized,
                 status: "error",
-                message: `无法读取结果文件: ${error.message}`,
+                result: { message: errorMessage },
               });
               resolve(); // 即使错误也解析 Promise，确保队列继续处理
             });
@@ -155,27 +205,31 @@ async function processFile(folderPath, file, broadcast, fileStatus, isNormalized
         // 执行 Python 脚本
         exec(command, async (error, stdout, stderr) => {
           if (error) {
-            logger.error(`执行 Python 脚本时出错: ${error.message}`);
-            fileStatus.set(fileKey, { status: "error", result: null });
+            const errorMessage = `Python 脚本 error: ${error.message}`;
+            logger.error(errorMessage);
+            fileStatus.set(fileKey, { status: "error", result: { message: errorMessage } });
+            saveFileStatus(fileKey, { status: "error", result: { message: errorMessage } });
             broadcast("file_processed", {
               folderPath: folderPath,
               file: file,
               isNormalized: isNormalized,
               status: "error",
-              message: error.message,
+              result: { message: errorMessage },
             });
             resolve(); // 解析 Promise
             return;
           }
           if (stderr) {
-            logger.error(`Python 脚本 stderr: ${stderr}`);
-            fileStatus.set(fileKey, { status: "error", result: null });
+            const errorMessage = `Python 脚本 stderr: ${stderr}`;
+            logger.error(errorMessage);
+            fileStatus.set(fileKey, { status: "error", result: { message: errorMessage } });
+            saveFileStatus(fileKey, { status: "error", result: { message: errorMessage } });
             broadcast("file_processed", {
               folderPath: folderPath,
               file: file,
               isNormalized: isNormalized,
               status: "error",
-              message: stderr,
+              result: { message: errorMessage },
             });
             resolve(); // 解析 Promise
             return;
@@ -202,54 +256,59 @@ async function processFile(folderPath, file, broadcast, fileStatus, isNormalized
 
             // 广播分析完成事件
             fileStatus.set(fileKey, { status: "completed", result: result });
+            saveFileStatus(fileKey, { status: "completed", result: result });
             broadcast("file_processed", {
               folderPath: folderPath,
               file: file,
               isNormalized: isNormalized,
               status: "completed",
-              tsr: result.tsr,
-              tsr_hotspot: result.tsr_hotspot,
-              segmentationFileName: result.segmentationFileName,
+              result: result,
             });
-            resolve(); // 解析 Promise
+            resolve();
           } catch (parseError) {
-            logger.error(`处理 Python 输出或读取 JSON 文件时出错: ${parseError.message}`);
-            fileStatus.set(fileKey, { status: "error", result: null });
+            const errorMessage = `处理 Python 输出或读取 JSON 文件时出错: ${parseError.message}`;
+            logger.error(errorMessage);
+            fileStatus.set(fileKey, { status: "error", result: { message: errorMessage } });
+            saveFileStatus(fileKey, { status: "error", result: { message: errorMessage } });
             broadcast("file_processed", {
               folderPath: folderPath,
               file: file,
               isNormalized: isNormalized,
               status: "error",
-              message: "无法解析 Python 脚本输出或读取 JSON 文件",
+              result: { message: errorMessage },
             });
-            resolve(); // 解析 Promise
+            resolve();
           }
         });
       })
       .catch((error) => {
-        logger.error(`检查文件是否已分析过时出错: ${error.message}`);
-        fileStatus.set(fileKey, { status: "error", result: null });
+        const errorMessage = `检查文件是否已分析过时出错: ${error.message}`;
+        logger.error(errorMessage);
+        fileStatus.set(fileKey, { status: "error", result: { message: errorMessage } });
+        saveFileStatus(fileKey, { status: "error", result: { message: errorMessage } });
         broadcast("file_processed", {
           folderPath: folderPath,
           file: file,
           isNormalized: isNormalized,
           status: "error",
-          message: `检查文件分析状态失败: ${error.message}`,
+          result: { message: errorMessage },
         });
-        resolve(); // 解析 Promise
+        resolve();
       });
   });
 }
 
-// 获取所有文件处理状态的路由
-router.get("/status", (req, res) => {
-  const statuses = Array.from(fileStatus.entries()).map(([key, value]) => {
-    const [folderPath, file, isNormalized] = key.split(path.sep);
-    console.log(folderPath, file, isNormalized);
+// 获取运行期间文件处理状态的路由
+router.get("/getAnalysisStatus", (req, res) => {
+  const fileInfos = Array.from(fileStatus.entries()).map(([key, value]) => {
+    const parts = key.split(path.sep);
+    const isNormalized = parts.pop();
+    const file = parts.pop();
+    const folderPath = parts.join(path.sep);
     return {
-      folderPath,
-      file,
-      isNormalized,
+      folderPath: folderPath,
+      file: file,
+      isNormalized: isNormalized,
       status: value.status,
       result: value.result,
     };
@@ -257,7 +316,7 @@ router.get("/status", (req, res) => {
 
   res.json({
     success: true,
-    statuses,
+    fileInfos,
   });
 });
 
@@ -276,7 +335,7 @@ router.post("/getFileList", async (req, res) => {
   try {
     // 读取文件夹内容
     const files = await fs.readdir(folderPath);
-    const wsiFiles = files.filter((file) => file.endsWith(".svs")); // 过滤出 .svs 文件
+    const wsiFiles = files.filter((file) => file.endsWith(".svs"));
 
     // 返回结果
     res.json({
@@ -303,7 +362,7 @@ router.post("/analyze", (req, res) => {
   }
 
   // 返回当前文件的状态
-  const results = files.map((file) => {
+  const fileInfos = files.map((file) => {
     const fileKey = path.join(folderPath, file, isNormalized);
     const status = fileStatus.get(fileKey);
     if (status) {
@@ -312,10 +371,8 @@ router.post("/analyze", (req, res) => {
           folderPath,
           file,
           status: "completed",
-          tsr: status.result.tsr,
-          tsr_hotspot: status.result.tsr_hotspot,
-          segmentationFileName: status.result.segmentationFileName,
           isNormalized,
+          result: status.result,
         };
       } else if (status.status === "analyzing") {
         return {
@@ -323,6 +380,7 @@ router.post("/analyze", (req, res) => {
           file,
           status: "analyzing",
           isNormalized,
+          result: null,
         };
       } else if (status.status === "queued") {
         return {
@@ -330,6 +388,7 @@ router.post("/analyze", (req, res) => {
           file,
           status: "queued",
           isNormalized,
+          result: null,
         };
       } else if (status.status === "error") {
         fileStatus.set(fileKey, { status: "queued", result: null });
@@ -339,6 +398,7 @@ router.post("/analyze", (req, res) => {
           file,
           status: "queued",
           isNormalized,
+          result: null,
         };
       }
     }
@@ -350,17 +410,23 @@ router.post("/analyze", (req, res) => {
       file,
       status: "queued", // 未处理的文件标记为 queued
       isNormalized,
+      result: null,
     };
   });
 
   // 返回答复
   res.json({
     success: true,
-    results: results,
+    fileInfos: fileInfos,
   });
 
   // 启动队列处理
   processNext(req.app.broadcast, fileStatus);
+});
+
+// 从文件系统加载状态文件到内存
+loadFileStatus(fileStatus).then(() => {
+  logger.info("文件状态已加载");
 });
 
 module.exports = router;

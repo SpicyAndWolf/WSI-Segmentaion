@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "result": {
+    "slideFileName": "2100064008_112515",
+    "slideFolder": "E:/Downloads/slides",
+    "modelPatchSize": 256,
+    "dictName": "default",
+    "modelName": "resnet50-256",
+    "tsr": 5.141843971631205,
+    "tsr_hotspot": 0,
+    "hotspot_file_name": "",
+    "segmentationFileName": "predictionImg-resnet50-256-default-2100064008_112515.png",
+    "isNormalized": "notNormalized"
+  }
+}
