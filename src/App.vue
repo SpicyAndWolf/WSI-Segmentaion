@@ -20,6 +20,7 @@ const selectedFiles = ref([]); // 存储选中的文件名
 const selectAll = ref(false); // 全选状态
 const currentFile = ref(null); // 当前查看的文件
 const currentFileOriginUrl = ref(""); // 当前查看的文件原图URL
+const displayedImageType = ref("segmentation"); // 默认显示分割结果，可选值：'segmentation', 'hotSpot', 'tumorEdge'
 
 // 分析状态和结果
 const analysisStatus = ref({}); // 存储每个文件的分析状态
@@ -36,13 +37,20 @@ const mapStatus = (fileInfo) => {
     const segmentationFileName = fileInfo.result.segmentationFileName;
     const tsr = fileInfo.result.tsr;
     const tsr_hotspot = fileInfo.result.tsr_hotspot;
-    const segmentationUrl = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}/${segmentationFileName}`;
+    const hotSpotName = fileInfo.result.hotspot_file_name;
+    const tumorEdgeName = fileInfo.result.tumorEdge_file_name;
+    const predict_res_dir = `${API_URL}/predictRes/${folderName}_${fileName}_${isNormalized}`;
+    const segmentationUrl = `${predict_res_dir}/${segmentationFileName}`;
+    const hotSpotUrl = `${predict_res_dir}/${hotSpotName}`;
+    const tumorEdgeUrl = `${predict_res_dir}/${tumorEdgeName}`;
 
     return {
       status: "completed",
       tsr: tsr,
       tsr_hotspot: tsr_hotspot,
       segmentationUrl: segmentationUrl,
+      hotSpotUrl: hotSpotUrl,
+      tumorEdgeUrl: tumorEdgeUrl,
     };
   } else if (fileInfo.status === "analyzing") {
     return {
@@ -188,11 +196,18 @@ const extractPng = async (file) => {
 const viewFile = async (file) => {
   currentFileOriginUrl.value = "";
   currentFileStatus.segmentationUrl = "";
+  currentFileStatus.hotSpotUrl = "";
+  currentFileStatus.tumorEdgeUrl = "";
   currentFileStatus.tsr = "";
   currentFileStatus.tsr_hotspot = "";
   currentFileStatus.status = "none";
   currentFile.value = file;
   await extractPng(file);
+};
+
+// 切换图片展示类型
+const switchImageType = (type) => {
+  displayedImageType.value = type;
 };
 
 // 开始分析
@@ -247,11 +262,20 @@ const currentFileStatus = computed(() => {
   const status = analysisStatus.value[currentFile.value];
   if (status) {
     if (status.status === "completed") {
+      // 展示图片类型
+      const displayedImageUrl =
+        displayedImageType.value === "segmentation"
+          ? status.segmentationUrl
+          : displayedImageType.value === "hotSpot"
+          ? status.hotSpotUrl
+          : status.tumorEdgeUrl;
       return {
         status: "completed",
         tsr: status.tsr,
         tsr_hotspot: status.tsr_hotspot,
         segmentationUrl: status.segmentationUrl,
+        hotSpotUrl: status.hotSpotUrl,
+        displayedImageUrl: displayedImageUrl,
       };
     } else if (status.status === "error") {
       return { status: "error", message: status.message };
@@ -359,7 +383,27 @@ const currentFileStatus = computed(() => {
             </div>
             <div v-else class="result-content">
               <div class="segmentation-image">
-                <img :src="currentFileStatus.segmentationUrl" alt="分割结果" class="image" />
+                <img :src="currentFileStatus.displayedImageUrl" class="image" />
+                <div class="image-switch-buttons">
+                  <ElButton
+                    :type="displayedImageType === 'segmentation' ? 'primary' : 'default'"
+                    @click="switchImageType('segmentation')"
+                  >
+                    分割结果
+                  </ElButton>
+                  <ElButton
+                    :type="displayedImageType === 'hotSpot' ? 'primary' : 'default'"
+                    @click="switchImageType('hotSpot')"
+                  >
+                    热点图
+                  </ElButton>
+                  <ElButton
+                    :type="displayedImageType === 'tumorEdge' ? 'primary' : 'default'"
+                    @click="switchImageType('tumorEdge')"
+                  >
+                    肿瘤边缘
+                  </ElButton>
+                </div>
               </div>
               <div class="tsr-result">
                 <p>TSR: {{ currentFileStatus.tsr }}</p>
@@ -544,6 +588,13 @@ const currentFileStatus = computed(() => {
 .image {
   max-width: 100%;
   height: auto;
+}
+
+.image-switch-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .original-image h3,
