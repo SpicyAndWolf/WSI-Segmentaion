@@ -57,6 +57,12 @@ onMounted(() => {
         tsr_hotspot: data.tsr_hotspot,
         segmentationUrl: segmentationUrl,
       };
+    } else if (data.status === "analyzing") {
+      ElMessage.info(`文件 ${data.file} 开始分析...`);
+      analysisStatus.value[data.file] = {
+        status: data.status,
+        message: "正在分析...",
+      };
     }
     if (currentFile.value === data.file) {
       currentFile.value = data.file;
@@ -171,7 +177,7 @@ const startAnalysis = async () => {
       ElMessage.success("分析已开始");
       const results = response.data.results;
 
-      // 更新每个选中文件（过滤后）的分析状态
+      // 更新每个选中文件的分析状态
       results.forEach((result) => {
         if (result.status === "completed") {
           // 对于分析已完成的
@@ -185,10 +191,22 @@ const startAnalysis = async () => {
             tsr_hotspot: result.tsr_hotspot,
             segmentationUrl: segmentationUrl,
           };
-        } else if (result.status === "analyzing") {
-          // 如果文件正在处理
+        }
+        // 对于正在分析、待分析的
+        else if (result.status === "analyzing") {
           analysisStatus.value[result.file] = {
             status: "analyzing",
+            message: "正在分析...",
+          };
+        } else if (result.status === "queued") {
+          analysisStatus.value[result.file] = {
+            status: "queued",
+            message: "等待处理中...",
+          };
+        } else if (result.status === "error") {
+          analysisStatus.value[result.file] = {
+            status: "error",
+            message: result.message,
           };
         }
       });
@@ -200,6 +218,20 @@ const startAnalysis = async () => {
     ElMessage.error("服务器错误，请检查后端服务");
   }
 };
+
+// 防抖函数，用于避免短时间多次触发分析按钮
+const debounce = (fn, delay) => {
+  let timer = null;
+  return (...args) => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+};
+
+// 包装 startAnalysis 函数
+const debouncedStartAnalysis = debounce(startAnalysis, 1000);
 
 // 计算当前文件的显示状态
 const currentFileStatus = computed(() => {
@@ -218,7 +250,9 @@ const currentFileStatus = computed(() => {
     } else if (status.status === "error") {
       return { status: "error", message: status.message };
     } else if (status.status === "analyzing") {
-      return { status: "analyzing", message: "正在分析..." };
+      return { status: "analyzing", message: status.message };
+    } else if (status.status === "queued") {
+      return { status: "queued", message: status.message };
     }
   }
   return { status: "not_analyzed", message: "尚未分析" };
@@ -264,7 +298,7 @@ const currentFileStatus = computed(() => {
         <!-- 功能按钮 -->
         <div class="sidebar-header">
           <ElCheckbox v-model="selectAll" @change="toggleSelectAll">全选</ElCheckbox>
-          <ElButton @click="startAnalysis" class="analysis-btn"> 开始分析 </ElButton>
+          <ElButton @click="debouncedStartAnalysis" class="analysis-btn"> 开始分析 </ElButton>
         </div>
 
         <!-- 文件名列表 -->
@@ -278,6 +312,7 @@ const currentFileStatus = computed(() => {
               'current-file': file === currentFile,
               completed: analysisStatus[file]?.status === 'completed',
               analyzing: analysisStatus[file]?.status === 'analyzing',
+              queued: analysisStatus[file]?.status === 'queued',
               error: analysisStatus[file]?.status === 'error',
             }"
             @click="toggleFileSelection(file)"
@@ -302,6 +337,10 @@ const currentFileStatus = computed(() => {
               {{ currentFileStatus.message }}
             </div>
             <div v-else-if="currentFileStatus.status === 'analyzing'" class="status-message">
+              <span>{{ currentFileStatus.message }}</span>
+              <div class="loading"></div>
+            </div>
+            <div v-else-if="currentFileStatus.status === 'queued'" class="status-message">
               <span>{{ currentFileStatus.message }}</span>
               <div class="loading"></div>
             </div>
@@ -460,6 +499,9 @@ const currentFileStatus = computed(() => {
 }
 .file-item.analyzing {
   color: rgb(14, 137, 238);
+}
+.file-item.queued {
+  color: rgb(255, 153, 0);
 }
 
 .file-item.error {
