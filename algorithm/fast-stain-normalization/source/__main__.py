@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import warnings
 import os
 from datetime import datetime, date
-from tqdm import tqdm
 from math import ceil
 import time
 from functools import partial
@@ -120,7 +119,7 @@ def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, worke
         os.makedirs(save_path, exist_ok=True)
 
         # sequential (batch_size = 1)
-        for path in tqdm(os.listdir(subdir_path), "Images :"):
+        for path in os.listdir(subdir_path):
             if path.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
                 print("\nImage format not supported:", os.path.join(subdir_path, path))
                 continue
@@ -170,7 +169,7 @@ def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parall
 
         tmp = os.listdir(subdir_path)
         with mp.Pool(processes=workers) as p:
-            ret = list(tqdm(p.imap_unordered(partial(single_transform, subdir_path + "/", device, save_path, torch_normalizer, backend), tmp), total=len(tmp), desc=f"Images in {subdir}:"))
+            ret = list(p.imap_unordered(partial(single_transform, subdir_path + "/", device, save_path, torch_normalizer, backend), tmp))
 
 def main():
     # init parser

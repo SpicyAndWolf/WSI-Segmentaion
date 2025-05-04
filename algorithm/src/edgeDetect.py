@@ -15,7 +15,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 # 基本变量
-model_patch_size = config['DEFAULT']['model_patch_size']
+model_patch_size = int(config['DEFAULT']['model_patch_size'])
 model_name = "resnet50-{}".format(model_patch_size)
 
 def edgeDetect(slide_folder, slide_name, res_dir, isNormalized):
@@ -47,7 +47,7 @@ def edgeDetect(slide_folder, slide_name, res_dir, isNormalized):
         print(f"预测 CSV 文件不存在: {csv_path}")
         return
     
-    df = pd.read_csv(csv_path)
+    df = pd.read_csv(csv_path, header=0)
     
     # 提取 patch 坐标
     df['y'] = df['patch'].str.split('_').str[0].astype(int)
