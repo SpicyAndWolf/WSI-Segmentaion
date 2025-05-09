@@ -617,3 +617,7 @@
 2025-04-02 16:06:46,388 INFO Epoch 31 	 Batch 1399	LR : 0.00468	Top1 Acc.: 92.56	CLS Loss: 0.22	Mixup Loss: 0.76	CRL Loss: 0.09	Tot. Loss: 1.00
 2025-04-02 16:14:04,771 INFO ################## 
  ---> Validation Epoch 31	Acc.: 97.394	FPR: 21.429	AUROC: 96.346	AUPR: 45.200	AURC: 1.358	EAURC: 1.016	AUPR Succ.: 99.896	ECE: 1.960	NLL: 0.787	Brier: 3.899
+2025-05-09 16:18:26,988 INFO Testing model_1 ...
+2025-05-09 16:18:27,781 INFO Using efficientnet_b2 ...
+2025-05-09 16:18:36,183 INFO ################## 
+ ---> Test MSP results：	Acc.: 96.433	FPR: 27.014	AUROC: 94.735	AUPR: 44.687	AURC: 2.749	EAURC: 2.105	AUPR Succ.: 99.783	ECE: 1.550	NLL: 1.001	Brier: 5.182
