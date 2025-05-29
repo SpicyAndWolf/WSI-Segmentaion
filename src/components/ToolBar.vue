@@ -40,10 +40,9 @@ defineEmits(["toggleSidebar", "update:isColorAdaptive", "update:folderPath", "up
 
     <div class="path-input-wrapper">
       <ElInput
-        :value="folderPath"
+        :modelValue="folderPath"
         placeholder="请输入WSI文件夹路径"
-        clearable
-        @input="$emit('update:folderPath', $event)"
+        @update:modelValue="$emit('update:folderPath', $event)"
       />
       <ElButton @click="$emit('updateFileList')" class="update-fileList-btn">更新</ElButton>
     </div>

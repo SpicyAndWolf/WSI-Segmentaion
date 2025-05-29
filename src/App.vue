@@ -84,6 +84,8 @@ const updateFileList = async () => {
     const fileListResponse = await axios.post(`${API_URL}/api/getFileList`, {
       folderPath: folderPath.value,
     });
+
+    // 正确获取返回数据
     if (fileListResponse.data.success) {
       fileList.value = fileListResponse.data.files;
       ElMessage.success("文件列表更新成功");
@@ -101,12 +103,14 @@ const updateFileList = async () => {
       } else {
         ElMessage.error(fileListResponse.data.message || "同步文件状态失败");
       }
-    } else {
+    }
+    // 处理错误
+    else {
       ElMessage.error(fileListResponse.data.message || "获取文件列表失败");
     }
   } catch (error) {
     console.error("获取文件列表失败:", error);
-    ElMessage.error("服务器错误，请检查后端服务");
+    ElMessage.error(error.response.data.message);
   }
 };
 
