@@ -1,0 +1,2 @@
+2025-05-15 15:47:29,010 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2122106007_230924', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
+2025-05-15 15:47:29,049 - python_logger - INFO - 开始分割 patch：2122106007_230924

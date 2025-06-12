@@ -1,0 +1,23 @@
+2025-05-09 11:24:37,376 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2105274011_221716.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2105274011_221716.png
+2025-05-09 11:26:39,758 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2004641017_223701', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-05-09 11:26:39,759 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2004409012_141125', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-05-09 11:26:39,759 - python_logger - INFO - 开始分割 patch：2004409012_141125
+2025-05-09 11:26:39,777 - python_logger - INFO - 开始分割 patch：2004641017_223701
+2025-05-09 11:43:48,950 - python_logger - INFO - a slide cost Time: 0:17:09.190033
+2025-05-09 11:44:26,402 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Other does not exist. Skipping.
+2025-05-09 11:44:26,403 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Stroma does not exist. Skipping.
+2025-05-09 11:44:26,403 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Tumor does not exist. Skipping.
+2025-05-09 11:44:27,321 - python_logger - INFO - start prediction for 2004409012_141125...
+2025-05-09 11:46:48,259 - python_logger - INFO - a slide cost Time: 0:20:08.480663
+2025-05-09 11:46:48,752 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004641017_223701\origin-256\Other does not exist. Skipping.
+2025-05-09 11:46:48,752 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004641017_223701\origin-256\Stroma does not exist. Skipping.
+2025-05-09 11:46:48,752 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004641017_223701\origin-256\Tumor does not exist. Skipping.
+2025-05-09 11:46:58,797 - python_logger - INFO - start prediction for 2004641017_223701...
+2025-05-09 12:47:42,406 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2005360012_000230.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2005360012_000230.png
+2025-05-09 15:27:29,990 - python_logger - INFO - Extracted lowest resolution image from E:/Downloads/slides\2100064008_112515.svs and saved to E:/Code/WSI/BackEnd\public/originImage\slides_2100064008_112515.png
+2025-05-09 15:27:40,491 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2100064008_112515', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-05-09 15:27:40,491 - python_logger - INFO - 开始分割 patch：2100064008_112515
+2025-05-09 15:29:29,955 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2001549007_101728', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'notNormalized'}
+2025-05-09 15:29:29,955 - python_logger - INFO - 开始分割 patch：2001549007_101728
+2025-05-09 15:32:28,830 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '1726363012', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
+2025-05-09 15:32:28,831 - python_logger - INFO - 开始分割 patch：1726363012

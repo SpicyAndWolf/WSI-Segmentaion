@@ -79,23 +79,3 @@
 2025-05-04 21:56:15,977 - python_logger - INFO - 共找到 4 个肿瘤区域。
 2025-05-04 21:56:15,977 - python_logger - INFO - 结果已保存至: E:/Code/WSI/BackEnd\public\predictRes\slides_2001549007_101728_normalized\tumor_edge-resnet50-256-normalized.png
 2025-05-04 21:56:15,995 - python_logger - INFO - 完成处理patch: 2001549007_101728
-2025-05-29 19:13:07,878 - python_logger - INFO - 请求处理patch: {'slide_fold': 'E:/Downloads/slides', 'slide_files_name': '2004409012_141125', 'model_patch_size': 256, 'dict_name': 'default', 'isNormalized': 'normalized'}
-2025-05-29 19:13:08,454 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Other does not exist. Skipping.
-2025-05-29 19:13:08,454 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Stroma does not exist. Skipping.
-2025-05-29 19:13:08,454 - python_logger - WARNING - Warning: Directory E:/Code/WSI/slidePatches\slides_2004409012_141125\origin-256\Tumor does not exist. Skipping.
-2025-05-29 19:13:08,571 - python_logger - INFO - start prediction for 2004409012_141125...
-2025-05-29 19:16:23,735 - python_logger - INFO - predict for 2004409012_141125 cost time: 0:03:15.164518
-2025-05-29 19:16:23,754 - python_logger - INFO - start merging 2004409012_141125...
-2025-05-29 19:16:30,801 - python_logger - INFO - merge for 2004409012_141125 cost time: 0:00:07.046184
-2025-05-29 19:16:30,816 - python_logger - INFO - 开始计算TSR：2004409012_141125
-2025-05-29 19:16:30,883 - python_logger - INFO - Slide: 2004409012_141125
-2025-05-29 19:16:30,883 - python_logger - INFO - Stroma patches: 7156
-2025-05-29 19:16:30,883 - python_logger - INFO - Tumor patches: 7084
-2025-05-29 19:16:30,883 - python_logger - INFO - TSR: 50.25%
-2025-05-29 19:16:35,396 - python_logger - INFO - Slide: 2004409012_141125
-2025-05-29 19:16:35,396 - python_logger - INFO - Hotspot center (grid coords): (145, 95)
-2025-05-29 19:16:35,396 - python_logger - INFO - Hotspot TSR: 43.00%
-2025-05-29 19:16:37,673 - python_logger - INFO - 处理完成 2004409012_141125，耗时: 0:00:01.913363
-2025-05-29 19:16:37,673 - python_logger - INFO - 共找到 1 个肿瘤区域。
-2025-05-29 19:16:37,673 - python_logger - INFO - 结果已保存至: E:/Code/WSI/BackEnd\public\predictRes\slides_2004409012_141125_normalized\tumor_edge-resnet50-256-normalized.png
-2025-05-29 19:16:37,676 - python_logger - INFO - 完成处理patch: 2004409012_141125
