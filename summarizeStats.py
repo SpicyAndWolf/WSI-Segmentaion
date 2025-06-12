@@ -1,9 +1,17 @@
 import os
 import json
 import csv
+import configparser
+
+# 读取配置文件
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+# 定义基本路径
+ROOT_PATH = config['DEFAULT']['ROOT_PATH']
 
 # 定义目录路径
-base_dir = r'E:/Code/WSI/BackEnd/public/predictRes'
+base_dir = os.path.join(ROOT_PATH, "public","predictRes")
 
 # 定义输出CSV文件路径
 output_csv = r"./tsr_stats.csv"
